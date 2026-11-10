@@ -67,7 +67,7 @@ header.logo-principal {
     top: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 135px;
+    width: 165px;
     height: auto;
     z-index: 99999;
     margin: 0;
@@ -167,43 +167,55 @@ header.logo-principal img {
 }
 
 
+
 /* ==========================================
    BOTONES PRINCIPALES
 ========================================== */
 
 #continue-mission,
-#start-mission {
-    padding: 15px 24px;
+button[data-section="solar"] {
+    padding: 18px 28px;
 
     background: linear-gradient(
-        110deg,
+        135deg,
         #087CF0,
+        #0646B8,
         #21C8F6
     );
 
-    border-radius: 10px;
+    color: #FFFFFF;
+    border: 2px solid #58E5FF;
+    border-radius: 16px;
 
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 800;
     letter-spacing: 1px;
 
     box-shadow:
-        0 0 20px rgba(33, 200, 246, 0.25);
+        0 0 15px rgba(33, 200, 246, 0.45),
+        0 0 30px rgba(33, 200, 246, 0.20);
+
+    cursor: pointer;
 
     transition:
-        transform 0.25s,
-        box-shadow 0.25s;
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 #continue-mission:hover,
-#start-mission:hover {
+button[data-section="solar"]:hover {
     transform: translateY(-3px);
 
     box-shadow:
-        0 0 30px rgba(33, 200, 246, 0.5);
+        0 0 25px rgba(33, 200, 246, 0.7),
+        0 0 40px rgba(33, 200, 246, 0.35);
 }
 
-#start-mission {
+button[data-section="solar"] {
     display: block;
+    width: 100%;
+    max-width: 440px;
+    min-height: 65px;
     margin: 25px auto 0;
 }
 
@@ -470,10 +482,10 @@ header.logo-principal img {
         padding: 100px 15px 25px;
 
         background: linear-gradient(
-            180deg,
-            rgba(2, 6, 17, 0.75),
-            rgba(2, 6, 17, 0.92)
-        );
+    180deg,
+    rgba(2, 6, 17, 0.25),
+    rgba(2, 6, 17, 0.48)
+);
     }
 
     .mission-card {
@@ -1132,4 +1144,135 @@ body:has(.challenge-overlay[style*="display: flex"]) .logo-principal {
     transform: translateY(-2px);
 }
 
+/* =====================================
+   EXPLORADOR DEL SISTEMA SOLAR
+===================================== */
+
+.solar-explorer {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    overflow: hidden;
+    background:
+        background: transparent;
+    color: #ffffff;
+    font-family: inherit;
+}
+
+.solar-explorer.active {
+    display: block;
+}
+
+.solar-header {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+    z-index: 2;
+}
+
+.solar-header h1 {
+    color: #FFD166;
+    font-size: clamp(20px, 3vw, 34px);
+    letter-spacing: 3px;
+    margin: 0 0 10px;
+}
+
+.solar-header p {
+    color: #c8d9ef;
+    font-size: 14px;
+}
+
+.solar-back {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    z-index: 5;
+    padding: 12px 18px;
+    border: 1px solid #21C8F6;
+    border-radius: 25px;
+    background: #07172F;
+    color: #FFD166;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.solar-info {
+    position: absolute;
+    right: 25px;
+    bottom: 80px;
+    z-index: 3;
+    width: 260px;
+    padding: 20px;
+    border: 1px solid #21C8F6;
+    border-radius: 18px;
+    background: rgba(2, 6, 17, 0.88);
+    box-shadow: 0 0 25px rgba(33, 200, 246, 0.2);
+}
+
+.solar-info h2 {
+    color: #FFD166;
+    margin-top: 0;
+}
+
+.solar-info p {
+    color: #e0eaf5;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.solar-instructions {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #21C8F6;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .solar-header {
+        top: 85px;
+    }
+
+    .solar-header h1 {
+        font-size: 19px;
+    }
+
+    .solar-info {
+        width: auto;
+        left: 15px;
+        right: 15px;
+        bottom: 65px;
+        padding: 12px;
+    }
+
+    .solar-info h2 {
+        font-size: 18px;
+    }
+
+    .solar-info p {
+        font-size: 12px;
+    }
+
+    .solar-back {
+        top: 15px;
+        left: 15px;
+        padding: 9px 13px;
+        font-size: 11px;
+    }
+}
+
+/* Permitir seleccionar los planetas 3D */
+.solar-explorer {
+    pointer-events: none;
+}
+
+.solar-back {
+    pointer-events: auto;
+}
 

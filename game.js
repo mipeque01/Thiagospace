@@ -1015,51 +1015,123 @@ const solarPointer = new THREE.Vector2();
 
 // SOL
 
- // ==========================================
- // CONTROLES DE CÁMARA 3D
- // ==========================================
+ 
+// ==========================================
+// CONTROLES DE CÁMARA 3D
+// ==========================================
 
 const solarCanvas = renderer.domElement;
 
-// GIRAR CON MOUSE O DEDO
+solarCanvas.style.touchAction = "none";
+
+const solarPointers = new Map();
+let solarPreviousPinchDistance = 0;
+
+// GIRAR CON UN DEDO O MOUSE
 solarCanvas.addEventListener("pointerdown", (event) => {
     if (!solarSystemActive) return;
 
-    solarDragging = true;
-    solarHasDragged = false;
-
-    solarPreviousX = event.clientX;
-    solarPreviousY = event.clientY;
+    solarPointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY
+    });
 
     solarCanvas.setPointerCapture(event.pointerId);
+
+    if (solarPointers.size === 1) {
+        solarDragging = true;
+        solarHasDragged = false;
+        solarPreviousX = event.clientX;
+        solarPreviousY = event.clientY;
+    }
+
+    if (solarPointers.size === 2) {
+        const points = [...solarPointers.values()];
+
+        solarPreviousPinchDistance = Math.hypot(
+            points[1].x - points[0].x,
+            points[1].y - points[0].y
+        );
+    }
 });
 
 solarCanvas.addEventListener("pointermove", (event) => {
-    if (!solarSystemActive || !solarDragging) return;
+    if (!solarSystemActive || !solarPointers.has(event.pointerId)) return;
 
-    const deltaX = event.clientX - solarPreviousX;
-    const deltaY = event.clientY - solarPreviousY;
+    solarPointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY
+    });
 
-    if (Math.abs(deltaX) + Math.abs(deltaY) > 3) {
-        solarHasDragged = true;
+    // GIRAR CON UN DEDO
+    if (solarPointers.size === 1) {
+
+        const deltaX = event.clientX - solarPreviousX;
+        const deltaY = event.clientY - solarPreviousY;
+
+        if (Math.abs(deltaX) + Math.abs(deltaY) > 3) {
+            solarHasDragged = true;
+        }
+
+        solarCameraAngle -= deltaX * 0.005;
+        solarCameraElevation += deltaY * 0.005;
+
+        solarCameraElevation = Math.max(
+            -1.35,
+            Math.min(1.35, solarCameraElevation)
+        );
+
+        solarPreviousX = event.clientX;
+        solarPreviousY = event.clientY;
+
+        updateSolarCamera();
     }
 
-    solarCameraAngle -= deltaX * 0.005;
-    solarCameraElevation += deltaY * 0.005;
+    // ZOOM CON DOS DEDOS
+    if (solarPointers.size === 2) {
 
-    solarCameraElevation = Math.max(
-        -1.35,
-        Math.min(1.35, solarCameraElevation)
-    );
+        solarHasDragged = true;
 
-    solarPreviousX = event.clientX;
-    solarPreviousY = event.clientY;
+        const points = [...solarPointers.values()];
 
-    updateSolarCamera();
+        const currentDistance = Math.hypot(
+            points[1].x - points[0].x,
+            points[1].y - points[0].y
+        );
+
+        const difference = currentDistance - solarPreviousPinchDistance;
+
+        solarCameraDistance -= difference * 0.08;
+
+        solarCameraDistance = Math.max(
+            30,
+            Math.min(90, solarCameraDistance)
+        );
+
+        solarPreviousPinchDistance = currentDistance;
+
+        updateSolarCamera();
+    }
 });
 
-function stopSolarDrag() {
-    solarDragging = false;
+// FINALIZAR GESTOS
+function stopSolarDrag(event) {
+
+    solarPointers.delete(event.pointerId);
+
+    solarDragging = solarPointers.size > 0;
+
+    if (solarPointers.size === 1) {
+
+        const remaining = [...solarPointers.values()][0];
+
+        solarPreviousX = remaining.x;
+        solarPreviousY = remaining.y;
+    }
+
+    if (solarPointers.size === 0) {
+        solarPreviousPinchDistance = 0;
+    }
 }
 
 solarCanvas.addEventListener("pointerup", stopSolarDrag);
@@ -1067,6 +1139,7 @@ solarCanvas.addEventListener("pointercancel", stopSolarDrag);
 
 // ZOOM CON RUEDA DEL MOUSE
 solarCanvas.addEventListener("wheel", (event) => {
+
     if (!solarSystemActive) return;
 
     event.preventDefault();
@@ -1079,7 +1152,9 @@ solarCanvas.addEventListener("wheel", (event) => {
     );
 
     updateSolarCamera();
+
 }, { passive: false });
+
 
 const sun = new THREE.Mesh(
     new THREE.SphereGeometry(2.2, 48, 48),
@@ -1485,7 +1560,7 @@ if (solarSystemActive) {
     sun.rotation.y += 0.001;
 
     solarPlanets.forEach(item => {
-        item.orbitPivot.rotation.y += item.speed;
+        item.orbitPivot.rotation.y += item.speed * 0.35;
         item.planet.rotation.y += 0.012;
     });
 
@@ -1688,13 +1763,18 @@ function startChallengeMission() {
 
     challengeStart.style.display = "none";
 
-    challengePlanetCharacter.innerHTML = `
-        <img
-            src="${mission.character}"
-            alt="${mission.planet}"
-            style="width:180px; max-width:100%; object-fit:contain;"
-        >
-    `;
+    const planetClass = mission.planet
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+challengePlanetCharacter.innerHTML = `
+    <div
+        class="challenge-planet ${planetClass}"
+        role="img"
+        aria-label="Planeta ${mission.planet}"
+    ></div>
+`;
 
     challengeAnswers.innerHTML = "";
 

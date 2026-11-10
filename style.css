@@ -1275,3 +1275,128 @@ body:has(.challenge-overlay[style*="display: flex"]) .logo-principal {
     pointer-events: auto;
 }
 
+/* =====================================
+   PLANETAS 3D DEL DESAFÍO ESPACIAL
+===================================== */
+
+#challenge-planet-character {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 190px;
+    margin: 12px auto 18px;
+    overflow: visible;
+}
+
+.challenge-planet {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: visible;
+    animation: planetFloat 4s ease-in-out infinite;
+    box-shadow:
+        inset -24px -15px 35px rgba(0,0,0,.65),
+        inset 8px 5px 18px rgba(255,255,255,.45),
+        0 0 28px rgba(50,190,255,.35);
+}
+
+.challenge-planet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: inherit;
+    background-size: 200% 100%;
+    animation: planetRotate 12s linear infinite;
+}
+
+.challenge-planet.mercurio {
+    background:
+        radial-gradient(circle at 30% 25%, #f5d6a0, transparent 12%),
+        radial-gradient(circle at 65% 65%, #5d4c47, transparent 15%),
+        repeating-radial-gradient(circle at 45% 45%, #b6a08a 0 5px, #79675d 7px, #d0b49b 10px);
+}
+
+.challenge-planet.venus {
+    background:
+        repeating-linear-gradient(160deg, #ffd77a 0 9px, #d87829 13px, #f5a847 19px, #ffe2a0 25px);
+}
+
+.challenge-planet.tierra {
+    background:
+        radial-gradient(ellipse at 30% 35%, #55d9a1 0 12%, transparent 13%),
+        radial-gradient(ellipse at 65% 60%, #65c76c 0 16%, transparent 17%),
+        radial-gradient(circle at 35% 30%, #55bfff, #0753a8 75%);
+}
+
+.challenge-planet.marte {
+    background:
+        radial-gradient(circle at 30% 25%, #ffbd76, transparent 12%),
+        repeating-linear-gradient(145deg, #d65b32 0 12px, #9d321f 16px, #ed8950 23px);
+}
+
+.challenge-planet.jupiter {
+    background:
+        repeating-linear-gradient(0deg, #f4d0a0 0 12px, #b96c43 15px, #f6e0bb 23px, #a94e32 28px);
+}
+
+.challenge-planet.saturno {
+    background:
+        repeating-linear-gradient(0deg, #f5dca4 0 13px, #c58e55 17px, #eac58c 25px);
+}
+
+.challenge-planet.saturno::after {
+    content: "";
+    position: absolute;
+    width: 205px;
+    height: 55px;
+    border: 9px solid rgba(220,190,140,.85);
+    border-radius: 50%;
+    top: 47px;
+    left: -36px;
+    transform: rotate(-18deg);
+    box-shadow: 0 0 12px rgba(255,210,140,.5);
+}
+
+.challenge-planet.urano {
+    background:
+        repeating-linear-gradient(0deg, #a9f5ee 0 13px, #40b9d3 18px, #80dce9 25px);
+}
+
+.challenge-planet.neptuno {
+    background:
+        repeating-linear-gradient(155deg, #1550bd 0 13px, #247fe0 18px, #123b99 25px, #56a8ed 31px);
+}
+
+@keyframes planetRotate {
+    from { background-position: 0 0; }
+    to { background-position: 200% 0; }
+}
+
+@keyframes planetFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@media (max-width: 600px) {
+    #challenge-planet-character {
+        min-height: 155px;
+        margin: 8px auto 12px;
+    }
+
+    .challenge-planet {
+        width: 125px;
+        height: 125px;
+    }
+
+    .challenge-planet.saturno::after {
+        width: 170px;
+        height: 45px;
+        left: -31px;
+        top: 40px;
+    }
+}
+

@@ -82,58 +82,58 @@
 
 
     <!-- =================================
-         INTERFAZ PRINCIPAL
-    ================================== -->
+     INTERFAZ PRINCIPAL
+================================== -->
 
-    <main class="interface">
+<main class="interface">
 
-        <section class="mission-card">
+    <section class="mission-card">
 
-            <div class="mission-label">
-                CENTRO DE EXPLORACIÓN
-            </div>
+        <div class="mission-label">
+            CENTRO DE EXPLORACIÓN
+        </div>
 
-            <h1>
-                Nuestro Sistema Solar
-            </h1>
+        <h1>
+            Nuestro Sistema Solar
+        </h1>
 
-            <p id="mission-description">
-                Descubre los planetas y aprende
-                increíbles secretos del universo.
-            </p>
+        <p id="mission-description">
+            Descubre los planetas y aprende
+            increíbles secretos del universo.
+        </p>
 
-            <button id="start-mission">
-                EXPLORAR EL UNIVERSO 🚀
-            </button>
+        <button class="space-button" data-section="solar">
+            🌌 EXPLORAR EL SISTEMA SOLAR 🚀
+        </button>
 
-        </section>
+    </section>
 
 
         <!-- =================================
-             ACCESOS EDUCATIVOS
-        ================================== -->
+     ACCESOS EDUCATIVOS
+================================== -->
 
-        <nav class="space-menu">
+<nav class="space-menu">
 
-            <button class="space-button" data-section="planets">
-                <span>🪐</span>
-                <strong>PLANETAS</strong>
-                <small>Descubre nuestro sistema solar</small>
-            </button>
+    <button class="space-button" data-section="planets">
+        <span>🪐</span>
+        <strong>PLANETAS</strong>
+        <small>Descubre nuestro sistema solar</small>
+    </button>
 
-            <button class="space-button" data-section="assistant">
-                <span>🤖</span>
-                <strong>GUÍA ESPACIAL</strong>
-                <small>Pregunta y aprende</small>
-            </button>
+    <button class="space-button" data-section="assistant">
+        <span>🤖</span>
+        <strong>GUÍA ESPACIAL</strong>
+        <small>Pregunta y aprende</small>
+    </button>
 
-            <button class="space-button" data-section="quiz">
-                <span>⭐</span>
-                <strong>DESAFÍO ESPACIAL</strong>
-                <small>Pon a prueba tus conocimientos</small>
-            </button>
+    <button class="space-button" data-section="quiz">
+        <span>⭐</span>
+        <strong>DESAFÍO ESPACIAL</strong>
+        <small>Pon a prueba tus conocimientos</small>
+    </button>
 
-        </nav>
+</nav>
 
         
         <!-- =================================
@@ -333,7 +333,31 @@
         </div>
 
     </main>
+<!-- =====================================
+     EXPLORADOR DEL SISTEMA SOLAR
+===================================== -->
 
+<section id="solar-explorer" class="solar-explorer">
+
+    <button id="solar-back" class="solar-back">
+        ← VOLVER AL MENÚ
+    </button>
+
+    <div class="solar-header">
+        <h1>EXPLORADORES DEL SISTEMA SOLAR</h1>
+        <p>Descubre los secretos de nuestro universo</p>
+    </div>
+
+    <div id="solar-info" class="solar-info">
+        <h2>☀️ El Sol</h2>
+        <p>Selecciona un planeta para comenzar tu exploración.</p>
+    </div>
+
+    <div class="solar-instructions">
+        Toca un planeta para descubrirlo
+    </div>
+
+</section>
 
     <!-- =================================
          JAVASCRIPT

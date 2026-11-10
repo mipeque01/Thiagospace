@@ -618,7 +618,6 @@ if (planetsButton) {
         planetsScreen.classList.add("active");
         educationPanel.classList.remove("active");
 
-        document.querySelector(".logo-principal").style.display = "none";
     });
 }
 
@@ -808,94 +807,649 @@ if (closePanelButton) {
 // GUÍA ESPACIAL - METEORITOS
 // ==========================================
 
+
+// ==========================================
+// GUÍA ESPACIAL - BIBLIOTECA DEL UNIVERSO
+// ==========================================
+
 const assistantButton = document.querySelector('[data-section="assistant"]');
+
+const guideTopics = {
+    sistema: {
+        icon: "☀️",
+        title: "Nuestro Sistema Solar",
+        intro: "El Sistema Solar es nuestro hogar en el universo.",
+        sections: [
+            ["¿Qué es el Sistema Solar?", "Es un conjunto formado por el Sol y todos los cuerpos celestes que giran a su alrededor debido a la gravedad."],
+            ["¿Cuántos planetas tiene?", "Tiene ocho planetas: Mercurio, Venus, Tierra, Marte, Júpiter, Saturno, Urano y Neptuno."],
+            ["Dato de explorador 🚀", "El Sol es una estrella y contiene casi toda la masa de nuestro Sistema Solar."]
+        ]
+    },
+
+    universo: {
+        icon: "🌌",
+        title: "El Universo y las galaxias",
+        intro: "¡El universo es muchísimo más grande de lo que imaginamos!",
+        sections: [
+            ["¿Qué es el universo?", "Es todo lo que existe: estrellas, planetas, galaxias, materia y energía."],
+            ["¿Qué es una galaxia?", "Es un enorme conjunto de estrellas, gas, polvo y otros objetos unidos por la gravedad."],
+            ["Nuestra galaxia ⭐", "Vivimos en la Vía Láctea, una galaxia que contiene miles de millones de estrellas."]
+        ]
+    },
+
+    planetas: {
+        icon: "🪐",
+        title: "Los ocho planetas",
+        intro: "Cada planeta tiene características sorprendentes.",
+        sections: [
+            ["Planetas rocosos", "Mercurio, Venus, Tierra y Marte son planetas rocosos. Tienen superficies sólidas."],
+            ["Gigantes del Sistema Solar", "Júpiter y Saturno son gigantes gaseosos. Urano y Neptuno son gigantes helados."],
+            ["Dato de explorador 🚀", "Júpiter es el planeta más grande y Mercurio es el más cercano al Sol."]
+        ]
+    },
+
+    tierra: {
+        icon: "🌍",
+        title: "La Tierra y la Luna",
+        intro: "Nuestro planeta es un lugar extraordinario.",
+        sections: [
+            ["¿Por qué hay día y noche?", "Porque la Tierra gira sobre sí misma. La parte que mira al Sol tiene día y la parte opuesta tiene noche."],
+            ["¿Por qué vemos diferentes fases de la Luna?", "Porque vemos distintas partes de la Luna iluminadas por el Sol mientras nuestro satélite se mueve alrededor de la Tierra."],
+            ["Dato de explorador 🌙", "La Luna es el satélite natural de la Tierra y tarda aproximadamente 27 días en dar una vuelta alrededor de nuestro planeta."]
+        ]
+    },
+
+    exploracion: {
+        icon: "🚀",
+        title: "Exploración espacial",
+        intro: "¡Los seres humanos también han viajado al espacio!",
+        sections: [
+            ["¿Qué hace un astronauta?", "Explora el espacio, realiza experimentos y estudia nuestro planeta y otros cuerpos celestes."],
+            ["¿Qué es una estación espacial?", "Es un laboratorio que orbita la Tierra y donde los astronautas pueden vivir y trabajar."],
+            ["Dato de explorador ⭐", "La Estación Espacial Internacional permite realizar investigaciones científicas en el espacio."]
+        ]
+    },
+
+    meteoritos: {
+        icon: "☄️",
+        title: "¡Misión Meteoritos!",
+        intro: "¡Bienvenido, explorador! Hoy descubriremos los misterios de las rocas espaciales.",
+        sections: [
+            ["¿Qué es un meteorito?", "Un meteorito es un fragmento de roca o metal procedente del espacio que logra atravesar la atmósfera y llegar hasta la superficie de la Tierra o de otro cuerpo celeste."],
+            ["🌠 ¿Sabías que...?", "Cuando un pequeño fragmento espacial entra en la atmósfera y produce una brillante estela de luz, lo llamamos meteoro. Si una parte llega hasta el suelo, se convierte en meteorito."],
+            ["🚀 ¡Dato de explorador!", "Los meteoritos nos ayudan a conocer cómo se formó nuestro Sistema Solar."]
+        ]
+    },
+
+    curiosidades: {
+        icon: "⭐",
+        title: "Datos sorprendentes",
+        intro: "¡Prepárate para descubrir algunos secretos del espacio!",
+        sections: [
+            ["El día más largo", "Venus tarda más en girar sobre sí mismo que en dar una vuelta alrededor del Sol."],
+            ["Una montaña gigante", "Marte tiene el Monte Olimpo, un volcán enorme que es el más alto conocido del Sistema Solar."],
+            ["Un planeta con muchos satélites", "Saturno tiene un espectacular sistema de anillos formado principalmente por hielo y fragmentos rocosos."]
+        ]
+    },
+
+    rocas: {
+        icon: "☄️",
+        title: "Asteroides y cometas",
+        intro: "En el espacio también existen cuerpos pequeños que viajan alrededor del Sol.",
+        sections: [
+            ["¿Qué es un asteroide?", "Es un cuerpo rocoso que gira alrededor del Sol. Muchos se encuentran en el cinturón de asteroides entre Marte y Júpiter."],
+            ["¿Qué es un cometa?", "Es un cuerpo formado por hielo, polvo y roca. Cuando se acerca al Sol, puede desarrollar una brillante cola."],
+            ["Dato de explorador 🚀", "Los cometas y asteroides son restos de los materiales que participaron en la formación del Sistema Solar."]
+        ]
+    }
+};
+
+function showGuideHome() {
+    educationContent.innerHTML = `
+        <h2>🌌 GUÍA ESPACIAL</h2>
+        <p>¡Hola, explorador! Elige un tema para descubrir los secretos del universo.</p>
+
+        <div class="guide-topics">
+            ${Object.entries(guideTopics).map(([key, topic]) => `
+                <button class="guide-topic" data-guide-topic="${key}">
+                    ${topic.icon} ${topic.title}
+                </button>
+            `).join("")}
+        </div>
+
+        <p>🚀 ¡Tu aventura por el conocimiento comienza aquí!</p>
+    `;
+
+    educationContent.querySelectorAll("[data-guide-topic]").forEach(button => {
+        button.addEventListener("click", () => {
+            showGuideTopic(button.dataset.guideTopic);
+        });
+    });
+}
+
+function showGuideTopic(key) {
+    const topic = guideTopics[key];
+    if (!topic) return;
+
+    educationContent.innerHTML = `
+        <h2>${topic.icon} ${topic.title}</h2>
+        <p>${topic.intro}</p>
+
+        ${topic.sections.map(section => `
+            <h3>${section[0]}</h3>
+            <p>${section[1]}</p>
+        `).join("")}
+
+        <button id="back-guide">
+            ← Volver a la Guía Espacial
+        </button>
+    `;
+
+    document.getElementById("back-guide").addEventListener("click", showGuideHome);
+}
 
 if (assistantButton) {
     assistantButton.addEventListener("click", () => {
-
-        educationContent.innerHTML = `
-            <h2>🌌 GUÍA ESPACIAL</h2>
-
-            <p>¡Hola, explorador! Elige un tema para descubrir el universo.</p>
-
-            <button id="meteorite-topic" class="guide-topic">
-                ☄️ Meteoritos
-            </button>
-
-            <p>Descubre los secretos de las rocas espaciales.</p>
-        `;
+        showGuideHome();
 
         educationPanel.classList.add("active");
         planetsScreen.classList.remove("active");
 
-        document.querySelector(".logo-principal").style.display = "none";
-
-        // Abrir tema meteoritos
-        const meteoriteButton = document.getElementById("meteorite-topic");
-
-        meteoriteButton.addEventListener("click", () => {
-
-            educationContent.innerHTML = `
-                <h2>☄️ ¡Misión Meteoritos!</h2>
-
-                <p>
-                    ¡Bienvenido, explorador! Hoy descubriremos
-                    los misterios de las rocas espaciales.
-                </p>
-
-                <h3>¿Qué es un meteorito?</h3>
-
-                <p>
-                    Un meteorito es un fragmento de roca o metal
-                    procedente del espacio que logra atravesar
-                    la atmósfera y llegar hasta la superficie
-                    de la Tierra o de otro cuerpo celeste.
-                </p>
-
-                <h3>🌠 ¿Sabías que...?</h3>
-
-                <p>
-                    Cuando un pequeño fragmento espacial entra
-                    en la atmósfera y produce una brillante
-                    estela de luz, lo llamamos meteoro.
-                </p>
-
-                <p>
-                    Si una parte de ese fragmento llega
-                    hasta el suelo, se convierte en meteorito.
-                </p>
-
-                <h3>🚀 ¡Dato de explorador!</h3>
-
-                <p>
-                    Los meteoritos nos ayudan a conocer
-                    cómo se formó nuestro Sistema Solar.
-                </p>
-
-                <button id="back-guide">
-                    ← Volver a la Guía Espacial
-                </button>
-            `;
-
-            document.getElementById("back-guide").addEventListener("click", () => {
-                assistantButton.click();
-            });
-
-        });
-
     });
 }
+
 
 // ==========================================
 // ANIMACIÓN
 // ==========================================
+// INICIO DEL EXPLORADOR SOLAR
+let solarSystemActive = false;
 
+ // ==========================================
+ // CÁMARA 3D DEL SISTEMA SOLAR
+ // ==========================================
+
+let solarCameraAngle = 0;
+let solarCameraElevation = 0.62;
+let solarCameraDistance = 53;
+
+let solarDragging = false;
+let solarPreviousX = 0;
+let solarPreviousY = 0;
+let solarHasDragged = false;
+
+function updateSolarCamera() {
+
+    const horizontalDistance =
+        Math.cos(solarCameraElevation) * solarCameraDistance;
+
+    camera.position.x =
+        Math.sin(solarCameraAngle) * horizontalDistance;
+
+    camera.position.y =
+        Math.sin(solarCameraElevation) * solarCameraDistance;
+
+    camera.position.z =
+        Math.cos(solarCameraAngle) * horizontalDistance;
+
+    camera.lookAt(0, 0, 0);
+}
+
+const solarExplorer = document.getElementById("solar-explorer");
+const solarButton = document.querySelector('[data-section="solar"]');
+const solarBackButton = document.getElementById("solar-back");
+const solarInfo = document.getElementById("solar-info");
+
+const solarSystemGroup = new THREE.Group();
+solarSystemGroup.visible = false;
+scene.add(solarSystemGroup);
+// ==========================================
+// CREACIÓN DEL SOL Y LOS 8 PLANETAS
+// ==========================================
+
+const solarPlanets = [];
+const solarRaycaster = new THREE.Raycaster();
+const solarPointer = new THREE.Vector2();
+
+
+
+// SOL
+
+ // ==========================================
+ // CONTROLES DE CÁMARA 3D
+ // ==========================================
+
+const solarCanvas = renderer.domElement;
+
+// GIRAR CON MOUSE O DEDO
+solarCanvas.addEventListener("pointerdown", (event) => {
+    if (!solarSystemActive) return;
+
+    solarDragging = true;
+    solarHasDragged = false;
+
+    solarPreviousX = event.clientX;
+    solarPreviousY = event.clientY;
+
+    solarCanvas.setPointerCapture(event.pointerId);
+});
+
+solarCanvas.addEventListener("pointermove", (event) => {
+    if (!solarSystemActive || !solarDragging) return;
+
+    const deltaX = event.clientX - solarPreviousX;
+    const deltaY = event.clientY - solarPreviousY;
+
+    if (Math.abs(deltaX) + Math.abs(deltaY) > 3) {
+        solarHasDragged = true;
+    }
+
+    solarCameraAngle -= deltaX * 0.005;
+    solarCameraElevation += deltaY * 0.005;
+
+    solarCameraElevation = Math.max(
+        -1.35,
+        Math.min(1.35, solarCameraElevation)
+    );
+
+    solarPreviousX = event.clientX;
+    solarPreviousY = event.clientY;
+
+    updateSolarCamera();
+});
+
+function stopSolarDrag() {
+    solarDragging = false;
+}
+
+solarCanvas.addEventListener("pointerup", stopSolarDrag);
+solarCanvas.addEventListener("pointercancel", stopSolarDrag);
+
+// ZOOM CON RUEDA DEL MOUSE
+solarCanvas.addEventListener("wheel", (event) => {
+    if (!solarSystemActive) return;
+
+    event.preventDefault();
+
+    solarCameraDistance += event.deltaY * 0.035;
+
+    solarCameraDistance = Math.max(
+        30,
+        Math.min(90, solarCameraDistance)
+    );
+
+    updateSolarCamera();
+}, { passive: false });
+
+const sun = new THREE.Mesh(
+    new THREE.SphereGeometry(2.2, 48, 48),
+    new THREE.MeshBasicMaterial({
+        color: 0xffa51f
+    })
+);
+
+solarSystemGroup.add(sun);
+
+const solarSunLight = new THREE.PointLight(0xffaa33, 180, 100);
+solarSystemGroup.add(solarSunLight);
+
+// PLANETAS
+const solarPlanetData = [
+    { name: "Mercurio", color: 0x99918a, size: 0.38, distance: 4, speed: 0.025, description: "Es el planeta más cercano al Sol y el más pequeño." },
+    { name: "Venus", color: 0xe6b56b, size: 0.65, distance: 6, speed: 0.018, description: "Es el planeta más caliente del Sistema Solar." },
+    { name: "Tierra", color: 0x247eea, size: 0.72, distance: 8.5, speed: 0.014, description: "Es nuestro hogar y tiene agua líquida y vida." },
+    { name: "Marte", color: 0xc94f32, size: 0.55, distance: 11, speed: 0.011, description: "Es conocido como el planeta rojo." },
+    { name: "Júpiter", color: 0xd5a77d, size: 1.35, distance: 15, speed: 0.007, description: "Es el planeta más grande del Sistema Solar." },
+    { name: "Saturno", color: 0xe6d0a0, size: 1.1, distance: 19, speed: 0.005, description: "Es famoso por sus hermosos anillos." },
+    { name: "Urano", color: 0x77d5dc, size: 0.85, distance: 23, speed: 0.0035, description: "Es un gigante helado de color azul verdoso." },
+    { name: "Neptuno", color: 0x3159d8, size: 0.82, distance: 27, speed: 0.0025, description: "Es el planeta más lejano del Sol." }
+];
+
+// ==========================================
+// GENERADOR DE TEXTURAS PROCEDURALES
+// THIAGO SPACE EXPLORER
+// ==========================================
+
+function createSolarPlanetTexture(name) {
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 1024;
+    canvas.height = 512;
+
+    const ctx = canvas.getContext("2d");
+
+    // COLORES BASE
+    const colors = {
+        "Mercurio": ["#77736e", "#aaa39a"],
+        "Venus": ["#a96c36", "#e7c18a"],
+        "Tierra": ["#063b83", "#168bd1"],
+        "Marte": ["#762d20", "#d66b43"],
+        "Júpiter": ["#a56d4b", "#e5c39b"],
+        "Saturno": ["#a88b60", "#e8d4a5"],
+        "Urano": ["#267c91", "#8bd9e4"],
+        "Neptuno": ["#102e83", "#397ce0"]
+    };
+
+    const palette = colors[name] || ["#555555", "#aaaaaa"];
+
+    // FONDO Y VARIACIONES DE COLOR
+    const gradient = ctx.createLinearGradient(0, 0, 0, 512);
+    gradient.addColorStop(0, palette[1]);
+    gradient.addColorStop(0.5, palette[0]);
+    gradient.addColorStop(1, palette[1]);
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 1024, 512);
+
+    // TIERRA: OCÉANOS Y CONTINENTES
+    if (name === "Tierra") {
+
+        ctx.fillStyle = "#176d43";
+
+        const continents = [
+            [220, 145, 115, 85],
+            [285, 300, 65, 145],
+            [505, 140, 160, 90],
+            [540, 285, 100, 125],
+            [790, 170, 120, 75],
+            [875, 340, 65, 45]
+        ];
+
+        continents.forEach(([x, y, rx, ry]) => {
+            ctx.beginPath();
+            ctx.ellipse(x, y, rx, ry, 0.3, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // REGIONES DESÉRTICAS
+        ctx.fillStyle = "#b69b63";
+
+        ctx.beginPath();
+        ctx.ellipse(530, 160, 65, 35, 0.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // NUBES
+        ctx.fillStyle = "rgba(255,255,255,0.22)";
+
+        for (let i = 0; i < 110; i++) {
+            const x = (i * 137) % 1024;
+            const y = (i * 73) % 512;
+
+            ctx.beginPath();
+            ctx.ellipse(x, y, 18, 5, 0.3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // JÚPITER Y SATURNO: BANDAS ATMOSFÉRICAS
+    if (name === "Júpiter" || name === "Saturno") {
+
+        const bands = name === "Júpiter" ? 24 : 17;
+
+        for (let i = 0; i < bands; i++) {
+
+            const y = i * (512 / bands);
+
+            ctx.fillStyle = i % 2 === 0
+                ? "rgba(255,224,184,0.38)"
+                : "rgba(75,43,30,0.18)";
+
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+
+            for (let x = 0; x <= 1024; x += 32) {
+                ctx.lineTo(
+                    x,
+                    y + Math.sin(x * 0.018 + i) * 9
+                );
+            }
+
+            ctx.lineTo(1024, y + 30);
+            ctx.lineTo(0, y + 30);
+            ctx.closePath();
+            ctx.fill();
+        }
+    }
+
+    // GRAN MANCHA ROJA DE JÚPITER
+    if (name === "Júpiter") {
+
+        ctx.fillStyle = "#ad4932";
+
+        ctx.beginPath();
+        ctx.ellipse(690, 285, 65, 23, -0.1, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,210,170,0.6)";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+    }
+
+    // CRÁTERES DE MERCURIO Y MARTE
+    if (name === "Mercurio" || name === "Marte") {
+
+        for (let i = 0; i < 150; i++) {
+
+            const x = (i * 197) % 1024;
+            const y = (i * 113) % 512;
+            const radius = 3 + (i % 12);
+
+            ctx.fillStyle = "rgba(35,25,20,0.25)";
+
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = "rgba(255,220,190,0.28)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
+
+    // VENUS: NUBES DENSAS
+    if (name === "Venus") {
+
+        for (let i = 0; i < 180; i++) {
+
+            ctx.fillStyle = "rgba(255,224,160,0.13)";
+
+            ctx.beginPath();
+            ctx.ellipse(
+                (i * 83) % 1024,
+                (i * 47) % 512,
+                35,
+                8,
+                0.4,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+    }
+
+    // URANO Y NEPTUNO: BANDAS SUAVES
+    if (name === "Urano" || name === "Neptuno") {
+
+        for (let i = 0; i < 18; i++) {
+
+            ctx.fillStyle = "rgba(210,245,255,0.12)";
+
+            ctx.fillRect(0, i * 30, 1024, 12);
+        }
+    }
+
+    // TEXTURA FINAL
+    const texture = new THREE.CanvasTexture(canvas);
+
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    return texture;
+}
+
+
+solarPlanetData.forEach(data => {
+
+    // ÓRBITA
+    const points = [];
+
+    for (let i = 0; i <= 160; i++) {
+        const angle = (i / 160) * Math.PI * 2;
+
+        points.push(new THREE.Vector3(
+            Math.cos(angle) * data.distance,
+            0,
+            Math.sin(angle) * data.distance
+        ));
+    }
+
+    const orbitGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    const orbitLine = new THREE.Line(
+        orbitGeometry,
+        new THREE.LineBasicMaterial({
+            color: 0x456b9b,
+            transparent: true,
+            opacity: 0.55
+        })
+    );
+
+    solarSystemGroup.add(orbitLine);
+
+    // GRUPO ORBITAL
+    const pivot = new THREE.Group();
+    solarSystemGroup.add(pivot);
+
+    // PLANETA
+    const planet = new THREE.Mesh(
+    new THREE.SphereGeometry(data.size, 64, 64),
+    new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.9,
+        metalness: 0
+    })
+);
+// APLICAR TEXTURA PROCEDURAL AL PLANETA
+planet.material.map = createSolarPlanetTexture(data.name);
+planet.material.color.set(0xffffff);
+planet.material.needsUpdate = true;
+    planet.position.x = data.distance;
+
+    planet.userData = {
+        name: data.name,
+        description: data.description
+    };
+
+    pivot.add(planet);
+
+    // ANILLOS DE SATURNO
+    if (data.name === "Saturno") {
+        const rings = new THREE.Mesh(
+            new THREE.RingGeometry(data.size * 1.35, data.size * 2.1, 80),
+            new THREE.MeshBasicMaterial({
+                color: 0xd9c49b,
+                side: THREE.DoubleSide
+            })
+        );
+
+        rings.rotation.x = Math.PI / 2.4;
+        planet.add(rings);
+    }
+
+    solarPlanets.push({
+        planet: planet,
+        orbitPivot: pivot,
+        speed: data.speed
+    });
+
+});
+// ==========================================
+// ABRIR Y CERRAR EXPLORACIÓN SOLAR
+// ==========================================
+
+if (solarButton) {
+    solarButton.addEventListener("click", () => {
+
+        solarSystemActive = true;
+        solarSystemGroup.visible = true;
+
+        earth.visible = false;
+        clouds.visible = false;
+        atmosphere.visible = false;
+        moon.visible = false;
+        orbit.visible = false;
+        ship.visible = false;
+
+        document.querySelector(".interface").style.display = "none";
+
+        solarExplorer.classList.add("active");
+
+        camera.position.set(0, 31, 43);
+        camera.lookAt(0, 0, 0);
+
+        solarInfo.innerHTML = `
+            <h2>☀️ El Sol</h2>
+            <p>Es la estrella que ilumina nuestro Sistema Solar. ¡Selecciona un planeta para descubrirlo!</p>
+        `;
+    });
+}
+
+if (solarBackButton) {
+    solarBackButton.addEventListener("click", () => {
+
+        solarSystemActive = false;
+        solarSystemGroup.visible = false;
+        solarExplorer.classList.remove("active");
+
+        earth.visible = true;
+        clouds.visible = true;
+        atmosphere.visible = true;
+        moon.visible = true;
+        orbit.visible = true;
+        ship.visible = true;
+
+        cameraAngleX = 0;
+        cameraAngleY = 0;
+
+        document.querySelector(".interface").style.display = "";
+        document.querySelector(".logo-principal").style.display = "";
+
+    });
+}
+// ==========================================
+// SELECCIÓN DE PLANETAS
+// ==========================================
+
+renderer.domElement.addEventListener("click", (event) => {
+
+    if (!solarSystemActive) return;
+
+    solarPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    solarPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    solarRaycaster.setFromCamera(solarPointer, camera);
+
+    const planetMeshes = solarPlanets.map(item => item.planet);
+
+    const intersections = solarRaycaster.intersectObjects(planetMeshes);
+
+    if (intersections.length > 0) {
+
+        const selected = intersections[0].object;
+
+        solarInfo.innerHTML = `
+            <h2>🪐 ${selected.userData.name}</h2>
+            <p>${selected.userData.description}</p>
+            <p>¡Sigue explorando, astronauta!</p>
+        `;
+    }
+
+});
 function animate() {
 
     requestAnimationFrame(animate);
 
     // Animación de los planetas originales
-    if (!welcomeGroup.visible) {
+    if (!welcomeGroup.visible && !solarSystemActive) {
 
         earth.rotation.y += 0.0015;
         clouds.rotation.y += 0.0018;
@@ -925,7 +1479,17 @@ function animate() {
     }
 
     stars.rotation.y += 0.0001;
+// Animación del Sistema Solar
+if (solarSystemActive) {
 
+    sun.rotation.y += 0.001;
+
+    solarPlanets.forEach(item => {
+        item.orbitPivot.rotation.y += item.speed;
+        item.planet.rotation.y += 0.012;
+    });
+
+}
     renderer.render(scene, camera);
 }
 // ==========================================

@@ -1154,8 +1154,7 @@ body:has(.challenge-overlay[style*="display: flex"]) .logo-principal {
     z-index: 100;
     display: none;
     overflow: hidden;
-    background:
-        background: transparent;
+    background: transparent;
     color: #ffffff;
     font-family: inherit;
 }

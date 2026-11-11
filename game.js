@@ -1840,7 +1840,7 @@ nextMissionText.addEventListener("click", () => {
         challengeAnswers.innerHTML = "";
 
         challengeFeedback.textContent =
-            "¡Thiago, eres un verdadero explorador del universo! 🚀";
+            "¡Eres un verdadero explorador del universo!🚀 ";
 
         challengeStart.textContent = "Volver a jugar 🚀";
         challengeStart.style.display = "block";
@@ -1885,5 +1885,417 @@ if (challengeStart) {
     challengeStart.addEventListener("click", startChallengeMission);
 
 }
+
+// ==========================================
+// DESAFÍO ESPACIAL 2
+// ==========================================
+
+const rescueOverlay = document.getElementById("rescue-overlay");
+const rescueOpenButton = document.querySelector(
+    '[data-section="challenge2"]'
+);
+const rescueCloseButton = document.getElementById("rescue-close");
+
+const rescueProgress = document.getElementById("rescue-progress");
+const rescueTitle = document.getElementById("rescue-title");
+const rescueInstructions = document.getElementById("rescue-instructions");
+const rescueActivity = document.getElementById("rescue-activity");
+const rescueFeedback = document.getElementById("rescue-feedback");
+const rescueNext = document.getElementById("rescue-next");
+const rescueScore = document.getElementById("rescue-score");
+
+// Abrir el segundo desafío
+if (rescueOpenButton && rescueOverlay) {
+    rescueOpenButton.addEventListener("click", () => {
+        rescueOverlay.style.display = "flex";
+    });
+}
+
+// Cerrar el segundo desafío
+if (rescueCloseButton && rescueOverlay) {
+    rescueCloseButton.addEventListener("click", () => {
+        rescueOverlay.style.display = "none";
+    });
+}
+
+
+/* ==========================================
+   DESAFÍO ESPACIAL 2
+   MISIÓN 1: DETECTA EL PLANETA CORRECTO
+========================================== */
+
+let rescueMissionStarted = false;
+let rescueMissionCompleted = false;
+let rescuePoints = 0;
+
+function startRescueMissionOne() {
+
+    rescueMissionStarted = true;
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 1 DE 8";
+    rescueTitle.textContent = "¡Detecta el planeta correcto!";
+    rescueInstructions.textContent =
+        "Soy el planeta más cercano al Sol. ¿Quién soy?";
+
+    rescueFeedback.textContent = "";
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const planets = [
+        {
+            name: "Mercurio",
+            image: "02_PERSONAJES/Mercurio_personaje.png",
+            correct: true
+        },
+        {
+            name: "Venus",
+            image: "02_PERSONAJES/venus.png",
+            correct: false
+        },
+        {
+            name: "Marte",
+            image: "02_PERSONAJES/Marte_personaje.png",
+            correct: false
+        }
+    ];
+
+    planets.forEach(planet => {
+
+        const card = document.createElement("button");
+
+        card.className = "rescue-planet-option";
+
+        card.innerHTML = `
+            <img src="${planet.image}" alt="${planet.name}">
+            <span>${planet.name}</span>
+        `;
+
+        card.addEventListener("click", () => {
+
+            if (rescueMissionCompleted) return;
+
+            if (planet.correct) {
+
+                rescueMissionCompleted = true;
+                rescuePoints += 100;
+
+                rescueFeedback.textContent =
+                    "¡EXCELENTE, COMANDANTE! 🚀 " +
+                    "Mercurio es el planeta más cercano al Sol.";
+
+                rescueFeedback.style.color = "#7CFFB2";
+
+                card.classList.add("correct");
+
+                rescueScore.textContent =
+                    "⭐ Puntos: " + rescuePoints;
+
+                rescueActivity.querySelectorAll("button")
+                    .forEach(button => {
+                        button.disabled = true;
+                    });
+
+                rescueNext.textContent = "CONTINUAR EXPLORACIÓN 🚀";
+rescueNext.style.display = "inline-block";
+rescueNext.disabled = false;
+
+            } else {
+
+                rescueFeedback.textContent =
+                    "¡Casi lo logras! Inténtalo nuevamente, explorador. 🌟";
+
+                rescueFeedback.style.color = "#FFD76A";
+
+                card.classList.add("incorrect");
+
+                setTimeout(() => {
+                    card.classList.remove("incorrect");
+                }, 700);
+
+            }
+
+        });
+
+        rescueActivity.appendChild(card);
+
+    });
+
+}
+
+/* ==========================================
+   MISIÓN 2: ORDENA LOS PLANETAS
+========================================== */
+
+let rescueCurrentMission = 0;
+
+function startRescueMissionTwo() {
+
+    rescueCurrentMission = 2;
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 2 DE 8";
+    rescueTitle.textContent = "¡Ordena los planetas!";
+    rescueInstructions.textContent =
+        "Toca los planetas en orden, comenzando por el más cercano al Sol.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const correctOrder = [
+        "Mercurio", "Venus", "Tierra", "Marte",
+        "Júpiter", "Saturno", "Urano", "Neptuno"
+    ];
+
+    
+const planetOptions = [
+    { name: "Tierra", image: "01_ASSETS/planetas/tierra.png" },
+    { name: "Saturno", image: "01_ASSETS/planetas/saturno.png" },
+    { name: "Mercurio", image: "01_ASSETS/planetas/mercurio.png" },
+    { name: "Neptuno", image: "01_ASSETS/planetas/neptuno.png" },
+    { name: "Venus", image: "01_ASSETS/planetas/venus.png" },
+    { name: "Júpiter", image: "01_ASSETS/planetas/jupiter.png" },
+    { name: "Marte", image: "01_ASSETS/planetas/marte.png" },
+    { name: "Urano", image: "01_ASSETS/planetas/urano.png" }
+];
+
+
+    let nextPlanet = 0;
+
+    
+planetOptions.forEach(planet => {
+
+    const name = planet.name;
+
+    const card = document.createElement("button");
+    card.className = "rescue-planet-option";
+
+    card.innerHTML = `
+        <img src="${planet.image}" alt="${name}">
+        <span>${name}</span>
+    `;
+
+    card.addEventListener("click", () => {
+
+        if (rescueMissionCompleted || card.disabled) return;
+
+        if (name === correctOrder[nextPlanet]) {
+
+            card.classList.add("correct");
+            card.disabled = true;
+            nextPlanet++;
+
+            rescueFeedback.textContent =
+                "¡Muy bien! " + name + " está en su posición correcta. ⭐";
+
+            rescueFeedback.style.color = "#7CFFB2";
+
+            if (nextPlanet === correctOrder.length) {
+
+                rescueMissionCompleted = true;
+                rescuePoints += 100;
+
+                rescueFeedback.textContent =
+                    "¡ORDEN PERFECTO, COMANDANTE! 🚀 Has organizado los ocho planetas.";
+
+                rescueScore.textContent =
+                    "⭐ Puntos: " + rescuePoints;
+
+                rescueNext.textContent = "MISIÓN 2 COMPLETADA ⭐";
+                rescueNext.style.display = "inline-block";
+                rescueNext.disabled = false;
+            }
+
+        } else {
+
+            rescueFeedback.textContent =
+                "¡Revisa el orden! ¿Qué planeta está más cerca del Sol? 🌞";
+
+            rescueFeedback.style.color = "#FFD76A";
+
+            card.classList.add("incorrect");
+
+            setTimeout(() => {
+                card.classList.remove("incorrect");
+            }, 700);
+        }
+    });
+
+    rescueActivity.appendChild(card);
+});
+
+rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+}
+
+/* ==========================================
+   MISIÓN 3: SECRETOS DE JÚPITER Y SATURNO
+========================================== */
+
+function startRescueMissionThree() {
+
+    rescueCurrentMission = 3;
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 3 DE 8";
+    rescueTitle.textContent = "Los secretos de los gigantes";
+    rescueInstructions.textContent =
+        "¡Comandante! Descubre qué planeta corresponde a cada pista.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const questions = [
+        {
+            clue: "¿Cuál es el planeta más grande del Sistema Solar?",
+            answer: "Júpiter",
+            explanation: "¡Correcto! Júpiter es el planeta más grande."
+        },
+        {
+            clue: "¿Qué planeta es famoso por sus grandes anillos?",
+            answer: "Saturno",
+            explanation: "¡Excelente! Saturno es famoso por su espectacular sistema de anillos."
+        }
+    ];
+
+    let questionIndex = 0;
+
+    function showQuestion() {
+
+        const question = questions[questionIndex];
+
+        rescueInstructions.textContent = question.clue;
+        rescueActivity.innerHTML = "";
+
+        const planets = [
+            {
+                name: "Júpiter",
+                image: "01_ASSETS/planetas/jupiter.png"
+            },
+            {
+                name: "Saturno",
+                image: "01_ASSETS/planetas/saturno.png"
+            }
+        ];
+
+        planets.forEach(planet => {
+
+            const card = document.createElement("button");
+            card.className = "rescue-planet-option";
+
+            card.innerHTML = `
+                <img src="${planet.image}" alt="${planet.name}">
+                <span>${planet.name}</span>
+            `;
+
+            card.addEventListener("click", () => {
+
+                if (rescueMissionCompleted || card.disabled) return;
+
+                if (planet.name === question.answer) {
+
+                    card.classList.add("correct");
+
+                    rescueActivity.querySelectorAll("button")
+                        .forEach(button => button.disabled = true);
+
+                    rescueFeedback.textContent = question.explanation;
+                    rescueFeedback.style.color = "#7CFFB2";
+
+                    if (questionIndex === 0) {
+
+                        rescuePoints += 100;
+                        rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+                        setTimeout(() => {
+                            questionIndex++;
+                            rescueFeedback.textContent = "";
+                            showQuestion();
+                        }, 1300);
+
+                    } else {
+
+                        rescuePoints += 100;
+                        rescueMissionCompleted = true;
+
+                        rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+                        rescueFeedback.textContent =
+                            "¡MISIÓN SUPERADA, COMANDANTE! 🌟";
+
+                        rescueNext.textContent = "MISIÓN 3 COMPLETADA ⭐";
+                        rescueNext.style.display = "inline-block";
+                        rescueNext.disabled = true;
+                    }
+
+                } else {
+
+                    rescueFeedback.textContent =
+                        "¡Observa bien las pistas e inténtalo otra vez! 🚀";
+
+                    rescueFeedback.style.color = "#FFD76A";
+
+                    card.classList.add("incorrect");
+
+                    setTimeout(() => {
+                        card.classList.remove("incorrect");
+                    }, 700);
+                }
+            });
+
+            rescueActivity.appendChild(card);
+        });
+    }
+
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+    showQuestion();
+}
+
+
+
+// ==========================================
+// NAVEGACIÓN ENTRE MISIONES
+// ==========================================
+
+if (rescueNext) {
+
+    rescueNext.addEventListener("click", () => {
+
+        // Comenzar misión 1
+        if (!rescueMissionStarted) {
+
+            rescueCurrentMission = 1;
+            startRescueMissionOne();
+
+        }
+
+        // Pasar de misión 1 a misión 2
+        else if (
+            rescueCurrentMission === 1 &&
+            rescueMissionCompleted
+        ) {
+
+            startRescueMissionTwo();
+
+        }
+
+        // Pasar de misión 2 a misión 3
+        else if (
+            rescueCurrentMission === 2 &&
+            rescueMissionCompleted
+        ) {
+
+            startRescueMissionThree();
+
+        }
+
+    });
+
+}
+
+
 
 

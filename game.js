@@ -1947,7 +1947,7 @@ function startRescueMissionOne() {
     const planets = [
         {
             name: "Mercurio",
-            image: "02_PERSONAJES/Mercurio_personaje.png",
+            image: "02_PERSONAJES/mercurio_personaje.png",
             correct: true
         },
         {

@@ -2130,10 +2130,6 @@ planetOptions.forEach(planet => {
 rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
 }
 
-/* ==========================================
-   MISIÓN 3: SECRETOS DE JÚPITER Y SATURNO
-========================================== */
-
 function startRescueMissionThree() {
 
     rescueCurrentMission = 3;
@@ -2228,7 +2224,7 @@ function startRescueMissionThree() {
 
                         rescueNext.textContent = "MISIÓN 3 COMPLETADA ⭐";
                         rescueNext.style.display = "inline-block";
-                        rescueNext.disabled = true;
+                        rescueNext.disabled = false;
                     }
 
                 } else {
@@ -2254,6 +2250,944 @@ function startRescueMissionThree() {
     showQuestion();
 }
 
+// ==========================================
+// MISIÓN 4: VERDADERO O FALSO ESPACIAL
+// ==========================================
+
+function startRescueMissionFour() {
+
+    rescueCurrentMission = 4;
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 4 DE 8";
+    rescueTitle.textContent = "Verdadero o falso espacial";
+    rescueInstructions.textContent =
+        "¡Comandante! Analiza cada afirmación y selecciona tu respuesta.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const questions = [
+    {
+        statement: "Júpiter es el planeta más grande del Sistema Solar.",
+        image: "01_ASSETS/planetas/jupiter.png",
+        answer: true,
+        explanation: "¡Correcto! Júpiter es el planeta más grande."
+    },
+    {
+        statement: "Venus es el planeta más cercano al Sol.",
+        image: "01_ASSETS/planetas/venus.png",
+        answer: false,
+        explanation: "¡Muy bien! Mercurio es el planeta más cercano al Sol."
+    },
+    {
+        statement: "La Tierra tiene un satélite natural llamado Luna.",
+        image: "01_ASSETS/planetas/luna.png",
+        answer: true,
+        explanation: "¡Exacto! La Luna es el satélite natural de la Tierra."
+    },
+    {
+        statement: "Saturno es famoso por sus espectaculares anillos.",
+        image: "01_ASSETS/planetas/saturno.png",
+        answer: true,
+        explanation: "¡Excelente! Saturno es famoso por su sistema de anillos."
+    }
+];
+    let questionIndex = 0;
+
+    function showQuestion() {
+
+        const question = questions[questionIndex];
+
+        rescueInstructions.textContent =
+            "AFIRMACIÓN " + (questionIndex + 1) + " DE 4";
+
+        rescueActivity.innerHTML = `
+            <div style="
+                background: linear-gradient(145deg, #101d3c, #172c50);
+                border: 2px solid #36caff;
+                border-radius: 18px;
+                padding: 24px 18px;
+                max-width: 650px;
+                margin: 15px auto;
+                box-shadow: 0 0 25px rgba(54,202,255,0.2);
+                text-align: center;
+            ">
+
+                <div style="
+                    color: #45d9ff;
+                    font-size: 13px;
+                    letter-spacing: 3px;
+                    margin-bottom: 18px;
+                ">
+                    ◉ CENTRO DE CONTROL ESPACIAL
+                </div>
+
+                <div style="
+    margin: 15px auto 20px;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+">
+    <img
+        src="${question.image}"
+        alt="Imagen espacial"
+        style="
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(54,202,255,0.45));
+        "
+    >
+</div>
+
+                <p style="
+                    color: white;
+                    font-size: 20px;
+                    line-height: 1.5;
+                    font-weight: bold;
+                    margin-bottom: 25px;
+                ">
+                    ${question.statement}
+                </p>
+
+                <div style="
+                    display: flex;
+                    justify-content: center;
+                    gap: 14px;
+                    flex-wrap: wrap;
+                ">
+
+                    <button class="rescue-answer-button"
+                        data-answer="true"
+                        style="
+                            background: linear-gradient(135deg,#16b978,#087b59);
+                            color: white;
+                            border: 2px solid #65ffc0;
+                            border-radius: 12px;
+                            padding: 15px 25px;
+                            font-size: 17px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            min-width: 135px;
+                        ">
+                        ✓ VERDADERO
+                    </button>
+
+                    <button class="rescue-answer-button"
+                        data-answer="false"
+                        style="
+                            background: linear-gradient(135deg,#e05262,#a92348);
+                            color: white;
+                            border: 2px solid #ff91a3;
+                            border-radius: 12px;
+                            padding: 15px 25px;
+                            font-size: 17px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            min-width: 135px;
+                        ">
+                        ✕ FALSO
+                    </button>
+
+                </div>
+            </div>
+        `;
+
+        rescueActivity.querySelectorAll(".rescue-answer-button")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    if (rescueMissionCompleted || button.disabled) return;
+
+                    const selectedAnswer =
+                        button.dataset.answer === "true";
+
+                    if (selectedAnswer === question.answer) {
+
+                        rescueActivity.querySelectorAll("button")
+                            .forEach(btn => btn.disabled = true);
+
+                        rescuePoints += 50;
+                        rescueScore.textContent =
+                            "⭐ Puntos: " + rescuePoints;
+
+                        rescueFeedback.textContent =
+                            question.explanation + " +50 puntos ⭐";
+
+                        rescueFeedback.style.color = "#7CFFB2";
+
+                        setTimeout(() => {
+
+                            questionIndex++;
+
+                            if (questionIndex < questions.length) {
+
+                                rescueFeedback.textContent = "";
+                                showQuestion();
+
+                            } else {
+
+                                rescueMissionCompleted = true;
+
+                                rescueInstructions.textContent =
+                                    "¡Has superado las cuatro afirmaciones!";
+
+                                rescueActivity.innerHTML = `
+                                    <div style="
+                                        text-align: center;
+                                        padding: 25px;
+                                        color: white;
+                                    ">
+                                        <div style="font-size: 65px;">🏆</div>
+                                        <h2 style="color: #FFD76A;">
+                                            ¡MISIÓN SUPERADA!
+                                        </h2>
+                                        <p>
+                                            ¡Excelente trabajo, comandante!
+                                            Has demostrado tus conocimientos.
+                                        </p>
+                                    </div>
+                                `;
+
+                                rescueFeedback.textContent =
+                                    "¡Ganaste 200 puntos! ⭐";
+
+                                rescueNext.textContent =
+                                    "MISIÓN 4 COMPLETADA ⭐";
+
+                                rescueNext.style.display = "inline-block";
+                                rescueNext.disabled = false;
+
+                            }
+
+                        }, 1300);
+
+                    } else {
+
+                        rescueFeedback.textContent =
+                            "¡Revisa la afirmación e inténtalo otra vez! 🚀";
+
+                        rescueFeedback.style.color = "#FFD76A";
+                    }
+
+                });
+
+            });
+    }
+
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+    showQuestion();
+}
+
+
+function startRescueMissionFive() {
+
+    rescueCurrentMission = 5;
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 5 DE 8";
+    rescueTitle.textContent = "Tierra y Luna: misión orbital";
+    rescueInstructions.textContent =
+        "¡Comandante! Descubre los secretos de nuestro planeta y su satélite.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const questions = [
+        {
+            clue: "¿Cuál de estos dos cuerpos celestes es nuestro planeta?",
+            answer: "Tierra",
+            explanation: "¡Correcto! La Tierra es nuestro hogar en el universo."
+        },
+        {
+            clue: "¿Qué cuerpo celeste gira alrededor de la Tierra?",
+            answer: "Luna",
+            explanation: "¡Excelente! La Luna es el satélite natural de la Tierra."
+        },
+        {
+            clue: "¿Qué movimiento de la Tierra produce el día y la noche?",
+            answer: "Rotación",
+            explanation: "¡Muy bien! La Tierra gira sobre sí misma. Ese movimiento se llama rotación."
+        },
+        {
+            clue: "¿Por qué vemos diferentes fases de la Luna?",
+            answer: "Iluminación del Sol",
+            explanation: "¡Exacto! Vemos diferentes partes de la Luna iluminadas por el Sol."
+        }
+    ];
+
+    let questionIndex = 0;
+
+    function showQuestion() {
+
+        const question = questions[questionIndex];
+
+        rescueInstructions.textContent =
+            "PRUEBA " + (questionIndex + 1) + " DE 4";
+
+        rescueActivity.innerHTML = `
+            <div style="
+                background: linear-gradient(145deg, #101d3c, #172c50);
+                border: 2px solid #36caff;
+                border-radius: 18px;
+                padding: 22px 16px;
+                max-width: 650px;
+                margin: 15px auto;
+                box-shadow: 0 0 25px rgba(54,202,255,0.2);
+                text-align: center;
+            ">
+
+                <div style="
+                    color: #45d9ff;
+                    font-size: 13px;
+                    letter-spacing: 2px;
+                    margin-bottom: 18px;
+                ">
+                    🌎 EXPEDICIÓN TIERRA Y LUNA
+                </div>
+
+                <div style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 25px;
+                    flex-wrap: wrap;
+                    margin: 15px auto 22px;
+                ">
+
+                    <div>
+                        <img
+                            src="01_ASSETS/planetas/tierra.png"
+                            alt="Planeta Tierra"
+                            style="
+                                width: 125px;
+                                height: 125px;
+                                object-fit: contain;
+                                filter: drop-shadow(0 0 12px rgba(54,202,255,0.5));
+                            "
+                        >
+                        <div style="color:white;font-weight:bold;">
+                            TIERRA
+                        </div>
+                    </div>
+
+                    <div>
+                        <img
+                            src="01_ASSETS/planetas/luna.png"
+                            alt="La Luna"
+                            style="
+                                width: 125px;
+                                height: 125px;
+                                object-fit: contain;
+                                filter: drop-shadow(0 0 12px rgba(180,190,255,0.5));
+                            "
+                        >
+                        <div style="color:white;font-weight:bold;">
+                            LUNA
+                        </div>
+                    </div>
+
+                </div>
+
+                <p style="
+                    color: white;
+                    font-size: 19px;
+                    line-height: 1.5;
+                    font-weight: bold;
+                    margin: 15px 0 22px;
+                ">
+                    ${question.clue}
+                </p>
+
+                <div style="
+                    display: flex;
+                    justify-content: center;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                " id="rescue-five-options"></div>
+
+            </div>
+        `;
+
+        const optionsContainer =
+            rescueActivity.querySelector("#rescue-five-options");
+
+        let options = [];
+
+        if (questionIndex === 0) {
+            options = ["Luna", "Tierra"];
+        } else if (questionIndex === 1) {
+            options = ["Tierra", "Luna"];
+        } else if (questionIndex === 2) {
+            options = ["Traslación", "Rotación"];
+        } else {
+            options = [
+                "Porque cambia de forma",
+                "Iluminación del Sol"
+            ];
+        }
+
+        options.forEach(option => {
+
+            const button = document.createElement("button");
+
+            button.textContent = option;
+            button.style.cssText = `
+                background: linear-gradient(135deg,#087baf,#07517f);
+                color: white;
+                border: 2px solid #45d9ff;
+                border-radius: 12px;
+                padding: 14px 20px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                min-width: 140px;
+                max-width: 100%;
+            `;
+
+            button.addEventListener("click", () => {
+
+                if (rescueMissionCompleted || button.disabled) return;
+
+                if (option === question.answer) {
+
+                    optionsContainer.querySelectorAll("button")
+                        .forEach(btn => btn.disabled = true);
+
+                    rescuePoints += 50;
+
+                    rescueScore.textContent =
+                        "⭐ Puntos: " + rescuePoints;
+
+                    rescueFeedback.textContent =
+                        question.explanation + " +50 puntos ⭐";
+
+                    rescueFeedback.style.color = "#7CFFB2";
+
+                    setTimeout(() => {
+
+                        questionIndex++;
+
+                        if (questionIndex < questions.length) {
+
+                            rescueFeedback.textContent = "";
+                            showQuestion();
+
+                        } else {
+
+                            rescueMissionCompleted = true;
+
+                            rescueInstructions.textContent =
+                                "¡Has completado la expedición Tierra y Luna!";
+
+                            rescueActivity.innerHTML = `
+                                <div style="
+                                    text-align:center;
+                                    padding:25px;
+                                    color:white;
+                                ">
+                                    <div style="font-size:65px;">🌎🌙</div>
+
+                                    <h2 style="color:#FFD76A;">
+                                        ¡MISIÓN SUPERADA!
+                                    </h2>
+
+                                    <p>
+                                        ¡Excelente trabajo, comandante!
+                                        Ya conoces los secretos de la Tierra y la Luna.
+                                    </p>
+                                </div>
+                            `;
+
+                            rescueFeedback.textContent =
+                                "¡Ganaste 200 puntos! ⭐";
+
+                            rescueNext.textContent =
+                                "MISIÓN 5 COMPLETADA ⭐";
+
+                            rescueNext.style.display = "inline-block";
+                            rescueNext.disabled = false;
+
+                        }
+
+                    }, 1300);
+
+                } else {
+
+                    rescueFeedback.textContent =
+                        "¡Inténtalo otra vez, comandante! 🚀";
+
+                    rescueFeedback.style.color = "#FFD76A";
+                }
+
+            });
+
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+    showQuestion();
+}
+
+function startRescueMissionSix() {
+
+    rescueCurrentMission = 6;
+    const rescueWindow = document.querySelector(".rescue-window");
+
+rescueWindow.style.backgroundImage =
+    url('01_ASSETS/fondo-mision-6.jpg')
+
+rescueWindow.style.backgroundSize = "cover";
+rescueWindow.style.backgroundPosition = "center";
+rescueWindow.style.backgroundRepeat = "no-repeat";
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 6 DE 8";
+    rescueTitle.textContent = "Meteoritos y asteroides";
+    rescueInstructions.textContent =
+        "¡Comandante! Investiga los objetos misteriosos del espacio.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const questions = [
+        {
+            icon: "☄️",
+            title: "INVESTIGACIÓN 001",
+            clue: "¿Qué es un asteroide?",
+            options: [
+                "Una estrella brillante",
+                "Un cuerpo rocoso que gira alrededor del Sol",
+                "Un planeta con anillos"
+            ],
+            answer: "Un cuerpo rocoso que gira alrededor del Sol",
+            explanation: "¡Correcto! Los asteroides son cuerpos rocosos que giran alrededor del Sol."
+        },
+        {
+            icon: "🌠",
+            title: "INVESTIGACIÓN 002",
+            clue: "¿Cómo se llama la brillante estela de luz que vemos cuando un fragmento espacial entra en la atmósfera?",
+            options: [
+                "Meteoro",
+                "Asteroide",
+                "Satélite"
+            ],
+            answer: "Meteoro",
+            explanation: "¡Muy bien! El meteoro es el fenómeno luminoso que vemos en el cielo."
+        },
+        {
+            icon: "🌍",
+            title: "INVESTIGACIÓN 003",
+            clue: "¿Cómo se llama un fragmento espacial que logra llegar hasta la superficie de la Tierra?",
+            options: [
+                "Cometa",
+                "Meteoro",
+                "Meteorito"
+            ],
+            answer: "Meteorito",
+            explanation: "¡Exacto! Cuando un fragmento espacial llega al suelo, se llama meteorito."
+        },
+        {
+            icon: "🪐",
+            title: "INVESTIGACIÓN 004",
+            clue: "¿Entre qué dos planetas se encuentra el cinturón principal de asteroides?",
+            options: [
+                "Tierra y Marte",
+                "Marte y Júpiter",
+                "Júpiter y Saturno"
+            ],
+            answer: "Marte y Júpiter",
+            explanation: "¡Excelente! El cinturón principal de asteroides está entre Marte y Júpiter."
+        }
+    ];
+
+    let questionIndex = 0;
+
+    function showQuestion() {
+
+        const question = questions[questionIndex];
+
+        rescueInstructions.textContent =
+            "INVESTIGACIÓN " + (questionIndex + 1) + " DE 4";
+
+        rescueActivity.innerHTML = `
+            <div style="
+                background: linear-gradient(145deg, #10172f, #25204b);
+                border: 2px solid #a879ff;
+                border-radius: 20px;
+                padding: 24px 18px;
+                max-width: 650px;
+                margin: 15px auto;
+                box-shadow: 0 0 25px rgba(168,121,255,0.25);
+                text-align: center;
+            ">
+
+                <div style="
+                    color: #c6a5ff;
+                    font-size: 13px;
+                    letter-spacing: 3px;
+                    margin-bottom: 12px;
+                ">
+                    LABORATORIO ESPACIAL
+                </div>
+
+                <div style="
+                    font-size: 65px;
+                    margin: 12px auto;
+                    filter: drop-shadow(0 0 15px rgba(168,121,255,0.5));
+                ">
+                    ${question.icon}
+                </div>
+
+                <div style="
+                    color: #ffd76a;
+                    font-size: 12px;
+                    letter-spacing: 2px;
+                    margin-bottom: 12px;
+                ">
+                    ${question.title}
+                </div>
+
+                <p style="
+                    color: white;
+                    font-size: 19px;
+                    line-height: 1.5;
+                    font-weight: bold;
+                    margin: 15px 0 22px;
+                ">
+                    ${question.clue}
+                </p>
+
+                <div id="rescue-six-options" style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    max-width: 440px;
+                    margin: auto;
+                "></div>
+
+            </div>
+        `;
+
+        const optionsContainer =
+            rescueActivity.querySelector("#rescue-six-options");
+
+        question.options.forEach(option => {
+
+            const button = document.createElement("button");
+
+            button.textContent = option;
+
+            button.style.cssText = `
+                background: linear-gradient(135deg,#45317d,#263b72);
+                color: white;
+                border: 2px solid #a879ff;
+                border-radius: 12px;
+                padding: 14px 16px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                width: 100%;
+            `;
+
+            button.addEventListener("click", () => {
+
+                if (rescueMissionCompleted || button.disabled) return;
+
+                if (option === question.answer) {
+
+                    optionsContainer.querySelectorAll("button")
+                        .forEach(btn => btn.disabled = true);
+
+                    rescuePoints += 50;
+
+                    rescueScore.textContent =
+                        "⭐ Puntos: " + rescuePoints;
+
+                    rescueFeedback.textContent =
+                        question.explanation + " +50 puntos ⭐";
+
+                    rescueFeedback.style.color = "#7CFFB2";
+
+                    setTimeout(() => {
+
+                        questionIndex++;
+
+                        if (questionIndex < questions.length) {
+
+                            rescueFeedback.textContent = "";
+                            showQuestion();
+
+                        } else {
+
+                            rescueMissionCompleted = true;
+
+                            rescueInstructions.textContent =
+                                "¡Has completado todas las investigaciones!";
+
+                            rescueActivity.innerHTML = `
+                                <div style="
+                                    text-align:center;
+                                    padding:25px;
+                                    color:white;
+                                ">
+                                    <div style="font-size:65px;">🏆☄️</div>
+
+                                    <h2 style="color:#FFD76A;">
+                                        ¡MISIÓN SUPERADA!
+                                    </h2>
+
+                                    <p>
+                                        ¡Excelente trabajo, comandante!
+                                        Ya conoces los secretos de las rocas espaciales.
+                                    </p>
+                                </div>
+                            `;
+
+                            rescueFeedback.textContent =
+                                "¡Ganaste 200 puntos! ⭐";
+
+                            rescueNext.textContent =
+                                "MISIÓN 6 COMPLETADA ⭐";
+
+                            rescueNext.style.display = "inline-block";
+                            rescueNext.disabled = false;
+                        }
+
+                    }, 1300);
+
+                } else {
+
+                    rescueFeedback.textContent =
+                        "¡Analiza las pistas e inténtalo nuevamente, comandante! 🚀";
+
+                    rescueFeedback.style.color = "#FFD76A";
+                }
+
+            });
+
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+    showQuestion();
+}
+
+function startRescueMissionSeven() {
+
+    rescueCurrentMission = 7;
+    // FONDO EXCLUSIVO DE LA MISIÓN 7
+const rescueWindow = document.querySelector(".rescue-window");
+if (rescueWindow) {
+    rescueWindow.style.backgroundImage =
+        "linear-gradient(rgba(5, 10, 35, 0.25), rgba(5, 10, 35, 0.40)), url('01_ASSETS/fondo-mision-7.jpg')";
+
+    rescueWindow.style.backgroundSize = "cover";
+    rescueWindow.style.backgroundPosition = "center";
+    rescueWindow.style.backgroundRepeat = "no-repeat";
+}
+    rescueMissionCompleted = false;
+
+    rescueProgress.textContent = "MISIÓN 7 DE 8";
+    rescueTitle.textContent = "Completa el mapa del Sistema Solar";
+    rescueInstructions.textContent =
+        "¡Comandante! Ordena los planetas desde el Sol.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    const correctOrder = [
+        "Mercurio", "Venus", "Tierra", "Marte",
+        "Júpiter", "Saturno", "Urano", "Neptuno"
+    ];
+
+    const planets = [
+        { name: "Mercurio", image: "01_ASSETS/planetas/mercurio.png" },
+        { name: "Venus", image: "01_ASSETS/planetas/venus.png" },
+        { name: "Tierra", image: "01_ASSETS/planetas/tierra.png" },
+        { name: "Marte", image: "01_ASSETS/planetas/marte.png" },
+        { name: "Júpiter", image: "01_ASSETS/planetas/jupiter.png" },
+        { name: "Saturno", image: "01_ASSETS/planetas/saturno.png" },
+        { name: "Urano", image: "01_ASSETS/planetas/urano.png" },
+        { name: "Neptuno", image: "01_ASSETS/planetas/neptuno.png" }
+    ];
+
+    let nextPlanet = 0;
+
+    function showMap() {
+
+        rescueInstructions.textContent =
+            "PLANETA " + (nextPlanet + 1) + " DE 8 · " +
+            "¿Cuál sigue desde el Sol?";
+
+        rescueActivity.innerHTML = `
+            <div style="
+                background: linear-gradient(145deg,#101d3c,#172c50);
+                border: 2px solid #36caff;
+                border-radius: 20px;
+                padding: 20px 15px;
+                max-width: 700px;
+                margin: 15px auto;
+                text-align: center;
+                box-shadow: 0 0 25px rgba(54,202,255,0.2);
+            ">
+
+                <div style="
+                    color:#45d9ff;
+                    letter-spacing:2px;
+                    font-size:13px;
+                    margin-bottom:15px;
+                ">
+                    🌞 MAPA DE EXPLORACIÓN
+                </div>
+
+                <div style="
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    flex-wrap:wrap;
+                    gap:8px;
+                    margin-bottom:22px;
+                " id="rescue-seven-map"></div>
+
+                <div style="
+                    color:#ffd76a;
+                    font-weight:bold;
+                    margin-bottom:15px;
+                ">
+                    ELIGE EL SIGUIENTE PLANETA
+                </div>
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(auto-fit,minmax(115px,1fr));
+                    gap:12px;
+                " id="rescue-seven-options"></div>
+
+            </div>
+        `;
+
+        const map = rescueActivity.querySelector("#rescue-seven-map");
+        const options = rescueActivity.querySelector("#rescue-seven-options");
+
+        const sun = document.createElement("div");
+        sun.innerHTML = "☀️";
+        sun.style.fontSize = "32px";
+        map.appendChild(sun);
+correctOrder.slice(0, nextPlanet).forEach(name => {
+
+    const planet = planets.find(p => p.name === name);
+
+    const item = document.createElement("div");
+    item.innerHTML = `
+        <img src="${planet.image}" alt="${name}"
+        style="width:42px;height:42px;object-fit:contain;">
+    `;
+    map.appendChild(item);
+});
+        planets.forEach(planet => {
+
+            if (correctOrder.slice(0, nextPlanet).includes(planet.name)) {
+                return;
+            }
+
+            const button = document.createElement("button");
+
+            button.style.cssText = `
+                background:linear-gradient(145deg,#153b68,#102448);
+                border:2px solid #36caff;
+                border-radius:12px;
+                padding:10px 5px;
+                color:white;
+                cursor:pointer;
+                font-weight:bold;
+            `;
+
+            button.innerHTML = `
+                <img src="${planet.image}" alt="${planet.name}"
+                style="width:75px;height:75px;object-fit:contain;display:block;margin:auto;">
+                <span>${planet.name}</span>
+            `;
+
+            button.addEventListener("click", () => {
+
+                if (rescueMissionCompleted) return;
+
+                if (planet.name === correctOrder[nextPlanet]) {
+
+                    nextPlanet++;
+                    rescuePoints += 25;
+
+                    rescueScore.textContent =
+                        "⭐ Puntos: " + rescuePoints;
+
+                    rescueFeedback.textContent =
+                        "¡Correcto, comandante! 🌟";
+
+                    rescueFeedback.style.color = "#7CFFB2";
+
+                    if (nextPlanet === correctOrder.length) {
+
+                        rescueMissionCompleted = true;
+
+                        rescueInstructions.textContent =
+                            "¡Has completado el mapa del Sistema Solar!";
+
+                        rescueActivity.innerHTML = `
+                            <div style="text-align:center;padding:25px;color:white;">
+                                <div style="font-size:65px;">🌞🪐🏆</div>
+                                <h2 style="color:#FFD76A;">¡MAPA COMPLETADO!</h2>
+                                <p>¡Excelente trabajo, comandante! Has organizado los ocho planetas.</p>
+                            </div>
+                        `;
+
+                        rescueFeedback.textContent =
+                            "¡Ganaste 200 puntos! ⭐";
+
+                        rescueNext.textContent =
+                            "MISIÓN 7 COMPLETADA ⭐";
+
+                        rescueNext.style.display = "inline-block";
+                        rescueNext.disabled = false;
+
+                    } else {
+
+                        setTimeout(() => {
+                            rescueFeedback.textContent = "";
+                            showMap();
+                        }, 900);
+                    }
+
+                } else {
+
+                    rescueFeedback.textContent =
+                        "¡Ese no es el siguiente planeta! Busca el orden desde el Sol. 🚀";
+
+                    rescueFeedback.style.color = "#FFD76A";
+                }
+            });
+
+            options.appendChild(button);
+        });
+    }
+
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+    showMap();
+}
 
 
 // ==========================================
@@ -2292,7 +3226,356 @@ if (rescueNext) {
 
         }
 
+        // Pasar de misión 3 a misión 4
+else if (
+    rescueCurrentMission === 3 &&
+    rescueMissionCompleted
+) {
+
+    startRescueMissionFour();
+
+}
+// Pasar de misión 4 a misión 5
+else if (
+    rescueCurrentMission === 4 &&
+    rescueMissionCompleted
+) {
+
+    startRescueMissionFive();
+
+}
+
+// Pasar de misión 5 a misión 6
+else if (
+    rescueCurrentMission === 5 &&
+    rescueMissionCompleted
+) {
+
+    startRescueMissionSix();
+
+}
+
+// Pasar de misión 6 a misión 7
+else if (
+    rescueCurrentMission === 6 &&
+    rescueMissionCompleted
+) {
+    startRescueMissionSeven();
+}
+
+else if (
+    rescueCurrentMission === 7 &&
+    rescueMissionCompleted
+) {
+    startRescueMissionEight();
+}
+
     });
+
+}
+
+// ==========================================
+// MISIÓN 8: EL RETO FINAL DEL COMANDANTE
+// ==========================================
+
+function startRescueMissionEight() {
+
+    rescueCurrentMission = 8;
+    rescueMissionCompleted = false;
+
+    const rescueWindow = document.querySelector(".rescue-window");
+
+    if (rescueWindow) {
+        rescueWindow.style.backgroundImage =
+            "linear-gradient(rgba(5, 10, 35, 0.30), rgba(5, 10, 35, 0.45)), url('01_ASSETS/fondo-mision-8.jpg')";
+
+        rescueWindow.style.backgroundSize = "cover";
+        rescueWindow.style.backgroundPosition = "center";
+        rescueWindow.style.backgroundRepeat = "no-repeat";
+    }
+
+    rescueProgress.textContent = "MISIÓN 8 DE 8";
+    rescueTitle.textContent = "EL RETO FINAL DEL COMANDANTE";
+    rescueInstructions.textContent =
+        "¡Explorador Espacial! Demuestra todo lo que aprendiste en tu expedición espacial.";
+
+    rescueFeedback.textContent = "";
+    rescueNext.style.display = "none";
+    rescueActivity.innerHTML = "";
+
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+    
+    const finalQuestions = [
+        {
+            question: "¿Cuál es el planeta más cercano al Sol?",
+            options: ["Venus", "Mercurio", "Marte"],
+            answer: "Mercurio",
+            explanation: "¡Correcto! Mercurio es el planeta más cercano al Sol."
+        },
+        {
+            question: "¿Cuál es el planeta más grande del Sistema Solar?",
+            options: ["La Tierra", "Saturno", "Júpiter"],
+            answer: "Júpiter",
+            explanation: "¡Excelente! Júpiter es el planeta más grande."
+        },
+        {
+            question: "¿Qué cuerpo celeste gira alrededor de la Tierra?",
+            options: ["La Luna", "El Sol", "Marte"],
+            answer: "La Luna",
+            explanation: "¡Muy bien! La Luna es el satélite natural de la Tierra."
+        },
+        {
+            question: "¿Qué es el Sol?",
+            options: ["Un planeta", "Una estrella", "Un satélite"],
+            answer: "Una estrella",
+            explanation: "¡Así es! El Sol es una estrella que nos da luz y calor."
+        },
+        {
+            question: "¿Cuántos planetas tiene nuestro Sistema Solar?",
+            options: ["7", "8", "9"],
+            answer: "8",
+            explanation: "¡Perfecto, comandante! Nuestro Sistema Solar tiene ocho planetas."
+        }
+    ];
+
+    let currentFinalQuestion = 0;
+
+    function showFinalQuestion() {
+
+        const question = finalQuestions[currentFinalQuestion];
+
+        rescueInstructions.textContent =
+            "PRUEBA " + (currentFinalQuestion + 1) + " DE 5";
+
+        rescueFeedback.textContent = "";
+
+        rescueActivity.innerHTML = `
+            <div style="
+                max-width:650px;
+                margin:15px auto;
+                padding:22px;
+                background:rgba(5,15,45,0.88);
+                border:2px solid #55d9ff;
+                border-radius:22px;
+                text-align:center;
+                color:white;
+                box-shadow:0 0 25px rgba(54,202,255,0.25);
+            ">
+
+                <div style="font-size:35px;margin-bottom:12px;">
+                    🚀 ⭐
+                </div>
+
+                <div style="
+                    color:#ffd76a;
+                    font-size:13px;
+                    letter-spacing:2px;
+                    margin-bottom:15px;
+                ">
+                    RETO DEL COMANDANTE
+                </div>
+
+                <h2 style="
+                    color:white;
+                    font-size:21px;
+                    margin-bottom:22px;
+                ">
+                    ${question.question}
+                </h2>
+
+                <div id="final-answer-options" style="
+                    display:grid;
+                    grid-template-columns:1fr;
+                    gap:12px;
+                "></div>
+
+                <div style="
+                    margin-top:18px;
+                    color:#ffd76a;
+                    font-weight:bold;
+                ">
+                    ⭐ 100 PUNTOS POR RESPUESTA CORRECTA
+                </div>
+            </div>
+        `;
+
+        const answerOptions =
+            rescueActivity.querySelector("#final-answer-options");
+
+        question.options.forEach(option => {
+
+            const button = document.createElement("button");
+
+            button.textContent = option;
+
+            button.style.cssText = `
+                padding:14px;
+                border:2px solid #36caff;
+                border-radius:13px;
+                background:linear-gradient(145deg,#153b68,#102448);
+                color:white;
+                font-size:16px;
+                font-weight:bold;
+                cursor:pointer;
+            `;
+
+            button.addEventListener("click", () => {
+
+                if (option === question.answer) {
+
+                    rescuePoints += 100;
+
+                    rescueScore.textContent =
+                        "⭐ Puntos: " + rescuePoints;
+
+                    rescueFeedback.textContent =
+                        question.explanation;
+
+                    rescueFeedback.style.color = "#7CFFB2";
+
+                    currentFinalQuestion++;
+
+                    if (currentFinalQuestion === finalQuestions.length) {
+
+                        setTimeout(showFinalMedal, 1300);
+
+                    } else {
+
+                        setTimeout(showFinalQuestion, 1300);
+                    }
+
+                } else {
+
+                    rescueFeedback.textContent =
+                        "¡Inténtalo otra vez, comandante! 🚀";
+
+                    rescueFeedback.style.color = "#FFD76A";
+                }
+            });
+
+            answerOptions.appendChild(button);
+        });
+    }
+
+    function showFinalMedal() {
+
+        rescueMissionCompleted = true;
+
+        const rescueWindow = document.querySelector(".rescue-window");
+
+if (rescueWindow) {
+    rescueWindow.style.backgroundImage =
+        "linear-gradient(rgba(5, 10, 35, 0.20), rgba(5, 10, 35, 0.35)), url('01_ASSETS/fondo-final-celebracion.jpg')";
+
+    rescueWindow.style.backgroundSize = "cover";
+    rescueWindow.style.backgroundPosition = "center";
+    rescueWindow.style.backgroundRepeat = "no-repeat";
+}
+
+        rescueInstructions.textContent =
+            "¡HAS CONQUISTADO EL RETO FINAL!";
+
+        rescueFeedback.textContent =
+            "¡FELICITACIONES!";
+
+        rescueFeedback.style.color = "#FFD76A";
+
+        rescueActivity.innerHTML = `
+            <div style="
+                max-width:650px;
+                margin:15px auto;
+                padding:25px 15px;
+                background:linear-gradient(145deg,#101d3c,#25214c);
+                border:2px solid #FFD76A;
+                border-radius:24px;
+                text-align:center;
+                color:white;
+                box-shadow:0 0 35px rgba(255,215,106,0.35);
+            ">
+
+                <div style="font-size:45px;">
+                    ✨ 🚀 ✨
+                </div>
+
+                <h2 style="
+                    color:#FFD76A;
+                    letter-spacing:2px;
+                ">
+                    ¡MISIÓN CUMPLIDA!
+                </h2>
+
+                
+<style>
+@keyframes medalSpin {
+    0% { transform: perspective(800px) rotateY(0deg) scale(0.9); }
+    50% { transform: perspective(800px) rotateY(180deg) scale(1.05); }
+    100% { transform: perspective(800px) rotateY(360deg) scale(0.9); }
+}
+</style>
+
+<img
+    src="01_ASSETS/medalla-thiago-space.gif"
+    alt="Medalla Maestro del Sistema Solar"
+    style="
+        width:240px;
+        max-width:80%;
+        height:auto;
+        display:block;
+        margin:20px auto;
+        animation:medalSpin 5s ease-in-out infinite;
+        filter:drop-shadow(0 0 20px rgba(255,215,106,0.8));
+    "
+>
+
+
+                <div style="
+                    color:#FFD76A;
+                    font-size:23px;
+                    font-weight:bold;
+                    margin-bottom:12px;
+                ">
+                    🏆 MAESTRO DEL SISTEMA SOLAR
+                </div>
+
+                <p style="font-size:16px;line-height:1.6;">
+                    ¡Felicitaciones, EXPLORADOR!
+                    Has superado las ocho misiones y demostrado
+                    tus conocimientos sobre el universo.
+                </p>
+
+                <div style="
+                    font-size:25px;
+                    margin-top:18px;
+                ">
+                    🌞 🪐 🌎 🚀
+                </div>
+
+                <div style="
+                    color:#FFD76A;
+                    font-size:19px;
+                    font-weight:bold;
+                    margin-top:15px;
+                ">
+                    ⭐ PUNTUACIÓN FINAL: ${rescuePoints}
+                </div>
+
+                <p style="
+                    color:#a9dfff;
+                    margin-top:15px;
+                    font-size:13px;
+                ">
+                    THIAGO SPACE · EXPLORADORES DEL SISTEMA SOLAR
+                </p>
+
+            </div>
+        `;
+
+        rescueNext.style.display = "none";
+    }
+
+    showFinalQuestion();
+
 
 }
 

@@ -2181,6 +2181,17 @@ function startRescueMissionThree() {
     rescueCurrentMission = 3;
     rescueMissionCompleted = false;
 
+    const rescueWindow = document.querySelector(".rescue-window");
+
+if (rescueWindow) {
+    rescueWindow.style.backgroundImage =
+        "linear-gradient(rgba(5, 10, 35, 0.20), rgba(5, 10, 35, 0.35)), url('01_ASSETS/fondo-mision-3.png')";
+
+    rescueWindow.style.backgroundSize = "cover";
+    rescueWindow.style.backgroundPosition = "center";
+    rescueWindow.style.backgroundRepeat = "no-repeat";
+}
+
     rescueProgress.textContent = "MISIÓN 3 DE 8";
     rescueTitle.textContent = "Los secretos de los gigantes";
     rescueInstructions.textContent =
@@ -2307,6 +2318,17 @@ function startRescueMissionFour() {
 
     rescueCurrentMission = 4;
     rescueMissionCompleted = false;
+
+    const rescueWindow = document.querySelector(".rescue-window");
+
+if (rescueWindow) {
+    rescueWindow.style.backgroundImage =
+        "linear-gradient(rgba(5, 10, 35, 0.20), rgba(5, 10, 35, 0.35)), url('01_ASSETS/fondo-mision-4.png')";
+
+    rescueWindow.style.backgroundSize = "cover";
+    rescueWindow.style.backgroundPosition = "center";
+    rescueWindow.style.backgroundRepeat = "no-repeat";
+}
 
     rescueProgress.textContent = "MISIÓN 4 DE 8";
     rescueTitle.textContent = "Verdadero o falso espacial";
@@ -2542,6 +2564,17 @@ function startRescueMissionFive() {
 
     rescueCurrentMission = 5;
     rescueMissionCompleted = false;
+
+    const rescueWindow = document.querySelector(".rescue-window");
+
+if (rescueWindow) {
+    rescueWindow.style.backgroundImage =
+        "linear-gradient(rgba(5, 10, 35, 0.20), rgba(5, 10, 35, 0.35)), url('01_ASSETS/fondo-mision-5.png')";
+
+    rescueWindow.style.backgroundSize = "cover";
+    rescueWindow.style.backgroundPosition = "center";
+    rescueWindow.style.backgroundRepeat = "no-repeat";
+}
 
     rescueProgress.textContent = "MISIÓN 5 DE 8";
     rescueTitle.textContent = "Tierra y Luna: misión orbital";

@@ -1907,9 +1907,30 @@ const rescueFeedback = document.getElementById("rescue-feedback");
 const rescueNext = document.getElementById("rescue-next");
 const rescueScore = document.getElementById("rescue-score");
 
-// Abrir el segundo desafío
+// Abrir el segundo desafío y comenzar desde cero
 if (rescueOpenButton && rescueOverlay) {
     rescueOpenButton.addEventListener("click", () => {
+
+        // Reiniciar progreso y puntuación
+        rescueMissionStarted = false;
+        rescueMissionCompleted = false;
+        rescueCurrentMission = 0;
+        rescuePoints = 0;
+
+        // Restaurar pantalla inicial
+        rescueProgress.textContent = "MISIÓN 1 DE 8";
+        rescueTitle.textContent = "¡Prepárate para tu nueva aventura!";
+        rescueInstructions.textContent =
+            "Explora nuevos mundos y supera cada misión.";
+
+        rescueFeedback.textContent = "";
+        rescueActivity.innerHTML = "";
+        rescueScore.textContent = "⭐ Puntos: 0";
+
+        rescueNext.textContent = "COMENZAR AVENTURA 🚀";
+        rescueNext.style.display = "inline-block";
+        rescueNext.disabled = false;
+
         rescueOverlay.style.display = "flex";
     });
 }
@@ -1987,7 +2008,6 @@ function startRescueMissionOne() {
         }
     ];
 
-let attempts = 0;
     planets.forEach(planet => {
 
         const card = document.createElement("button");
@@ -2003,24 +2023,14 @@ let attempts = 0;
 
     if (rescueMissionCompleted) return;
 
-    attempts++;
-
     if (planet.correct) {
 
         rescueMissionCompleted = true;
 
-        if (attempts === 1) {
-            rescuePoints += 100;
-        } else if (attempts === 2) {
-            rescuePoints += 50;
-        }
+                rescuePoints += 100;
 
         rescueFeedback.textContent =
-            "¡EXCELENTE, COMANDANTE! 🚀 " +
-            (attempts === 1 ? "+100 puntos ⭐" :
-             attempts === 2 ? "+50 puntos ⭐" :
-             "¡Lo lograste! Sin puntos en este intento.");
-
+            "¡EXCELENTE, COMANDANTE! 🚀 +100 puntos ⭐";
         rescueFeedback.style.color = "#7CFFB2";
         card.classList.add("correct");
 
@@ -2033,41 +2043,25 @@ let attempts = 0;
         rescueNext.style.display = "inline-block";
         rescueNext.disabled = false;
 
-    } else {
+    
+} else {
 
-        rescueFeedback.style.color = "#FFD76A";
+    rescueFeedback.style.color = "#FFD76A";
 
-        if (attempts >= 3) {
+    rescuePoints = Math.max(0, rescuePoints - 25);
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
 
-            rescueMissionCompleted = true;
+    rescueFeedback.textContent =
+        "¡Respuesta incorrecta! Pierdes 25 puntos. Inténtalo otra vez, comandante. 🚀";
 
-            rescueFeedback.textContent =
-                "¡Se agotaron tus tres intentos! Esta pregunta no suma puntos. 🚀";
+    card.classList.add("incorrect");
 
-            rescueActivity.querySelectorAll("button")
-                .forEach(button => button.disabled = true);
-
-            rescueNext.textContent = "CONTINUAR EXPLORACIÓN 🚀";
-            rescueNext.style.display = "inline-block";
-            rescueNext.disabled = false;
-
-        } else {
-
-            rescueFeedback.textContent =
-                "¡Respuesta incorrecta! Te quedan " +
-                (3 - attempts) + " intentos. Pierdes 25 puntos. ⭐";
-
-            rescuePoints = Math.max(0, rescuePoints - 25);
-            rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
-
-            card.classList.add("incorrect");
-
-            setTimeout(() => {
-                card.classList.remove("incorrect");
-            }, 700);
-        }
-    }
+    setTimeout(() => {
+        card.classList.remove("incorrect");
+    }, 700);
+}
 });
+
 
         rescueActivity.appendChild(card);
 
@@ -2281,17 +2275,20 @@ function startRescueMissionThree() {
 
                 } else {
 
-                    rescueFeedback.textContent =
-                        "¡Observa bien las pistas e inténtalo otra vez! 🚀";
+    rescuePoints = Math.max(0, rescuePoints - 25);
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
 
-                    rescueFeedback.style.color = "#FFD76A";
+    rescueFeedback.textContent =
+        "¡Respuesta incorrecta! Pierdes 25 puntos. ¡Inténtalo otra vez, comandante! 🚀";
 
-                    card.classList.add("incorrect");
+    rescueFeedback.style.color = "#FFD76A";
 
-                    setTimeout(() => {
-                        card.classList.remove("incorrect");
-                    }, 700);
-                }
+    card.classList.add("incorrect");
+
+    setTimeout(() => {
+        card.classList.remove("incorrect");
+    }, 700);
+}
             });
 
             rescueActivity.appendChild(card);
@@ -2521,11 +2518,14 @@ function startRescueMissionFour() {
 
                     } else {
 
-                        rescueFeedback.textContent =
-                            "¡Revisa la afirmación e inténtalo otra vez! 🚀";
+    rescuePoints = Math.max(0, rescuePoints - 25);
+    rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
 
-                        rescueFeedback.style.color = "#FFD76A";
-                    }
+    rescueFeedback.textContent =
+        "¡Respuesta incorrecta! Pierdes 25 puntos. ¡Revisa la afirmación e inténtalo otra vez! 🚀";
+
+    rescueFeedback.style.color = "#FFD76A";
+}
 
                 });
 
@@ -2771,10 +2771,15 @@ function startRescueMissionFive() {
 
                     }, 1300);
 
-                } else {
+                                } else {
+
+                    rescuePoints = Math.max(0, rescuePoints - 25);
+
+                    rescueScore.textContent =
+                        "⭐ Puntos: " + rescuePoints;
 
                     rescueFeedback.textContent =
-                        "¡Inténtalo otra vez, comandante! 🚀";
+                        "¡Respuesta incorrecta! Pierdes 25 puntos. ¡Inténtalo otra vez, comandante! 🚀";
 
                     rescueFeedback.style.color = "#FFD76A";
                 }
@@ -2796,7 +2801,7 @@ function startRescueMissionSix() {
     const rescueWindow = document.querySelector(".rescue-window");
 
 rescueWindow.style.backgroundImage =
-    url('01_ASSETS/fondo-mision-6.jpg')
+    "url('01_ASSETS/fondo-mision-6.jpg')";
 
 rescueWindow.style.backgroundSize = "cover";
 rescueWindow.style.backgroundPosition = "center";
@@ -3018,14 +3023,18 @@ rescueWindow.style.backgroundRepeat = "no-repeat";
 
                     }, 1300);
 
-                } else {
+                                } else {
+
+                    rescuePoints = Math.max(0, rescuePoints - 25);
+
+                    rescueScore.textContent =
+                        "⭐ Puntos: " + rescuePoints;
 
                     rescueFeedback.textContent =
-                        "¡Analiza las pistas e inténtalo nuevamente, comandante! 🚀";
+                        "¡Respuesta incorrecta! Pierdes 25 puntos. ¡Analiza las pistas e inténtalo nuevamente, comandante! 🚀";
 
                     rescueFeedback.style.color = "#FFD76A";
                 }
-
             });
 
             optionsContainer.appendChild(button);
@@ -3225,11 +3234,16 @@ correctOrder.slice(0, nextPlanet).forEach(name => {
 
                 } else {
 
-                    rescueFeedback.textContent =
-                        "¡Ese no es el siguiente planeta! Busca el orden desde el Sol. 🚀";
+    rescuePoints = Math.max(0, rescuePoints - 25);
 
-                    rescueFeedback.style.color = "#FFD76A";
-                }
+    rescueScore.textContent =
+        "⭐ Puntos: " + rescuePoints;
+
+    rescueFeedback.textContent =
+        "¡Respuesta incorrecta! Pierdes 25 puntos. ¡Inténtalo otra vez, comandante! 🚀";
+
+    rescueFeedback.style.color = "#FFD76A";
+}
             });
 
             options.appendChild(button);
@@ -3499,11 +3513,16 @@ function startRescueMissionEight() {
 
                 } else {
 
-                    rescueFeedback.textContent =
-                        "¡Inténtalo otra vez, comandante! 🚀";
+    rescuePoints = Math.max(0, rescuePoints - 25);
 
-                    rescueFeedback.style.color = "#FFD76A";
-                }
+    rescueScore.textContent =
+        "⭐ Puntos: " + rescuePoints;
+
+    rescueFeedback.textContent =
+        "¡Respuesta incorrecta! Pierdes 25 puntos. ¡Inténtalo otra vez, comandante! 🚀";
+
+    rescueFeedback.style.color = "#FFD76A";
+}
             });
 
             answerOptions.appendChild(button);

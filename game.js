@@ -588,7 +588,7 @@ if (missionButton) {
         const logo = document.querySelector(".logo-principal");
 
         if (logo) {
-            logo.style.display = "";
+            logo.style.display = "block";
         }
 
         // Mantener visible la interfaz
@@ -617,6 +617,7 @@ if (planetsButton) {
     planetsButton.addEventListener("click", () => {
         planetsScreen.classList.add("active");
         educationPanel.classList.remove("active");
+        document.querySelector(".logo-principal").style.display = "none";
 
     });
 }
@@ -626,7 +627,7 @@ if (backToMenuButton) {
     backToMenuButton.addEventListener("click", () => {
         planetsScreen.classList.remove("active");
 
-        document.querySelector(".logo-principal").style.display = "";
+        document.querySelector(".logo-principal").style.display = "block";
     });
 }
 
@@ -953,6 +954,7 @@ if (assistantButton) {
         showGuideHome();
 
         educationPanel.classList.add("active");
+        document.querySelector(".logo-principal").style.display = "none";
         planetsScreen.classList.remove("active");
 
     });
@@ -1457,6 +1459,7 @@ if (solarButton) {
         document.querySelector(".interface").style.display = "none";
 
         solarExplorer.classList.add("active");
+        document.querySelector(".logo-principal").style.display = "none";
 
         camera.position.set(0, 31, 43);
         camera.lookAt(0, 0, 0);
@@ -1486,7 +1489,7 @@ if (solarBackButton) {
         cameraAngleY = 0;
 
         document.querySelector(".interface").style.display = "";
-        document.querySelector(".logo-principal").style.display = "";
+        document.querySelector(".logo-principal").style.display = "block";
 
     });
 }
@@ -1911,10 +1914,32 @@ if (rescueOpenButton && rescueOverlay) {
     });
 }
 
-// Cerrar el segundo desafío
+// Cerrar el segundo desafío y reiniciar la aventura
 if (rescueCloseButton && rescueOverlay) {
     rescueCloseButton.addEventListener("click", () => {
+
         rescueOverlay.style.display = "none";
+
+        // Reiniciar progreso y puntuación
+        rescueMissionStarted = false;
+        rescueMissionCompleted = false;
+        rescueCurrentMission = 0;
+        rescuePoints = 0;
+
+        // Restaurar pantalla inicial
+        rescueProgress.textContent = "MISIÓN 1 DE 8";
+        rescueTitle.textContent = "¡Prepárate para tu nueva aventura!";
+        rescueInstructions.textContent =
+            "Explora nuevos mundos y supera cada misión.";
+
+        rescueFeedback.textContent = "";
+        rescueActivity.innerHTML = "";
+        rescueScore.textContent = "⭐ Puntos: 0";
+
+        rescueNext.textContent = "COMENZAR AVENTURA 🚀";
+        rescueNext.style.display = "inline-block";
+        rescueNext.disabled = false;
+
     });
 }
 
@@ -1962,6 +1987,7 @@ function startRescueMissionOne() {
         }
     ];
 
+let attempts = 0;
     planets.forEach(planet => {
 
         const card = document.createElement("button");
@@ -1975,49 +2001,73 @@ function startRescueMissionOne() {
 
         card.addEventListener("click", () => {
 
-            if (rescueMissionCompleted) return;
+    if (rescueMissionCompleted) return;
 
-            if (planet.correct) {
+    attempts++;
 
-                rescueMissionCompleted = true;
-                rescuePoints += 100;
+    if (planet.correct) {
 
-                rescueFeedback.textContent =
-                    "¡EXCELENTE, COMANDANTE! 🚀 " +
-                    "Mercurio es el planeta más cercano al Sol.";
+        rescueMissionCompleted = true;
 
-                rescueFeedback.style.color = "#7CFFB2";
+        if (attempts === 1) {
+            rescuePoints += 100;
+        } else if (attempts === 2) {
+            rescuePoints += 50;
+        }
 
-                card.classList.add("correct");
+        rescueFeedback.textContent =
+            "¡EXCELENTE, COMANDANTE! 🚀 " +
+            (attempts === 1 ? "+100 puntos ⭐" :
+             attempts === 2 ? "+50 puntos ⭐" :
+             "¡Lo lograste! Sin puntos en este intento.");
 
-                rescueScore.textContent =
-                    "⭐ Puntos: " + rescuePoints;
+        rescueFeedback.style.color = "#7CFFB2";
+        card.classList.add("correct");
 
-                rescueActivity.querySelectorAll("button")
-                    .forEach(button => {
-                        button.disabled = true;
-                    });
+        rescueActivity.querySelectorAll("button")
+            .forEach(button => button.disabled = true);
 
-                rescueNext.textContent = "CONTINUAR EXPLORACIÓN 🚀";
-rescueNext.style.display = "inline-block";
-rescueNext.disabled = false;
+        rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
 
-            } else {
+        rescueNext.textContent = "CONTINUAR EXPLORACIÓN 🚀";
+        rescueNext.style.display = "inline-block";
+        rescueNext.disabled = false;
 
-                rescueFeedback.textContent =
-                    "¡Casi lo logras! Inténtalo nuevamente, explorador. 🌟";
+    } else {
 
-                rescueFeedback.style.color = "#FFD76A";
+        rescueFeedback.style.color = "#FFD76A";
 
-                card.classList.add("incorrect");
+        if (attempts >= 3) {
 
-                setTimeout(() => {
-                    card.classList.remove("incorrect");
-                }, 700);
+            rescueMissionCompleted = true;
 
-            }
+            rescueFeedback.textContent =
+                "¡Se agotaron tus tres intentos! Esta pregunta no suma puntos. 🚀";
 
-        });
+            rescueActivity.querySelectorAll("button")
+                .forEach(button => button.disabled = true);
+
+            rescueNext.textContent = "CONTINUAR EXPLORACIÓN 🚀";
+            rescueNext.style.display = "inline-block";
+            rescueNext.disabled = false;
+
+        } else {
+
+            rescueFeedback.textContent =
+                "¡Respuesta incorrecta! Te quedan " +
+                (3 - attempts) + " intentos. Pierdes 25 puntos. ⭐";
+
+            rescuePoints = Math.max(0, rescuePoints - 25);
+            rescueScore.textContent = "⭐ Puntos: " + rescuePoints;
+
+            card.classList.add("incorrect");
+
+            setTimeout(() => {
+                card.classList.remove("incorrect");
+            }, 700);
+        }
+    }
+});
 
         rescueActivity.appendChild(card);
 
@@ -2064,6 +2114,8 @@ const planetOptions = [
 
 
     let nextPlanet = 0;
+    let missionTwoErrors = 0;
+    let missionTwoPoints = 100;
 
     
 planetOptions.forEach(planet => {
@@ -2096,7 +2148,7 @@ planetOptions.forEach(planet => {
             if (nextPlanet === correctOrder.length) {
 
                 rescueMissionCompleted = true;
-                rescuePoints += 100;
+                rescuePoints += missionTwoPoints;
 
                 rescueFeedback.textContent =
                     "¡ORDEN PERFECTO, COMANDANTE! 🚀 Has organizado los ocho planetas.";
